@@ -1,0 +1,102 @@
+.window__check {
+    padding-top: 32px;
+    padding-bottom: 32px;
+
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+}
+
+.window__check-header {
+    padding-left: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #E6E9ED;
+}
+.window__check-header h1 {
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 2.1rem;
+    margin-bottom: 2.1rem;
+}
+.window__check-header__description {
+    display: flex;
+    flex-direction: column;
+}
+.window__check-header__description h3, .window__check-properties-prop h3, .window__check-user_info__char h3 {
+    line-height: 2rem;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--light-text);
+}
+.window__check-header__description p, .window__check-properties-prop p, .window__check-user_info__char p {
+    line-height: 2rem;
+    font-weight: 400;
+    font-size: 1.6rem;
+    color: var(--basic-text);
+}
+
+.window__check-properties {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding-left: 16px;
+    margin-bottom: 20px;
+}
+
+.window__check-user_info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding: 24px;
+    border-radius: 14px;
+    background-color: var(--card-grey);
+}
+
+.window__check-info_container {
+    height: 100%;
+    overflow-y: auto;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+}
+
+.window__check-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    margin-top: 20px;
+}
+.window__check-buttons__change_button {
+    height: 56px;
+    border-radius: 512px;
+
+    background-color: #000000;
+    color: #FFFFFF;
+
+    border: none;
+    outline: none;
+
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 2.1rem;
+}
+.window__check-buttons__back_button {
+    height: 56px;
+    border-radius: 512px;
+
+    height: 56px;
+
+    border-radius: 512px;
+    border: none;
+    outline: none;
+
+    background-color: var(--card-grey);
+
+    font-size: 1.6rem;
+    font-weight: 500;
+}

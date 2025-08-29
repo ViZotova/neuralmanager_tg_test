@@ -1,0 +1,158 @@
+.window__folder_observe {
+    padding-top: 48px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.folder_observe__folder_name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.folder_observe__folder_name svg {
+    width: 27px;
+}
+
+.folder_observe__folder_name h1 {
+    font-weight: 500;
+    font-size: 2.4rem;
+}
+
+.window__folder_observe .chat-search__input {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.folder_observe__hints_block {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 24px;
+
+    padding: 24px;
+
+    border-radius: 14px;
+    border: 1px solid #E6E6E6;
+
+    margin-bottom: 20px;
+}
+
+.folder_observe__hints_block-card:first-child {
+    border-right: 1px solid #E6E6E6;
+}
+
+.folder_observe__hints_block-card h2 {
+    font-weight: 600;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    color: var(--basic-text);
+}
+
+.folder_observe__hints_block-card p {
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--light-text);
+    max-width: 262px;
+    margin-top: 2px;
+    line-height: 120%;
+}
+
+.folder_observe__folders_list {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}
+
+.folder_observe__folders_list-card {
+    padding: 20px 24px;
+    border-bottom: 1px solid #E6E9ED;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.folder_observe__folders_list-card:last-child {
+    border-bottom: none;
+}
+
+.folders_list-card__content {
+    max-width: min(400px, 100%);
+}
+
+.folders_list-card__content h2 {
+    font-weight: 500;
+    font-size: 1.6rem;
+    line-height: 2.1rem;
+    color: var(--basic-text);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.folders_list-card__content p {
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    color: var(--light-text);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.folders_list-card__date {
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    color: var(--light-text);
+}
+
+@media (max-width: 500px) {
+    .folders_list-card__content {
+        max-width: 280px;
+    }
+
+    .folder_observe__hints_block-card p {
+        max-width: 100px;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .window__folder_observe .chat-search__input {
+        display: none;
+    }
+    
+    .folder_observe__folder_name {
+        margin-bottom: 37px;
+    }
+}
+
+
+@media (max-width: 420px) {
+    .folders_list-card__content {
+        max-width: 230px;
+    }
+}
+
+@media (max-width: 390px) {
+    .folder_observe__hints_block {
+        padding: 16px;
+        margin-bottom: 12px;
+        grid-gap: 16px;
+    }
+
+    .folder_observe__folders_list-card {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+}

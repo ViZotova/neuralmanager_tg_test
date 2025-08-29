@@ -1,0 +1,38 @@
+@import url(./reset.css);
+@import url(./fonts.css);
+
+@import url(./main.css);
+
+@import url(./folder_tab.css);
+@import url(./token_info.css);
+@import url(./general_settings.css);
+@import url(./tasks_list.css);
+@import url(./check.css);
+
+@import url(./filter_popup.css);
+
+* {
+    font-family: "SF Pro Display", sans-serif !important;
+}
+
+html {
+    font-size: 10px;
+}
+
+.app {
+    --page-color: #FFFFFF;
+    --basic-text: #000000;
+    --light-text: #3C3C4399;
+    --basic-svg: #000000;
+    --light-svg: #3C3C3C4D;
+
+    --basic-button: #000000;
+    --light-border: #E6E9ED;
+    --search-border: #C7C7C7;
+    --placeholder-color: #858585;
+
+    --card-grey: #F6F6F6;
+    --card-bluegrey: #F5F7FA;
+
+    --attention-red: #DC3A49;
+}
