@@ -34,14 +34,15 @@ window.onload = async () => {
         });
 
     document.querySelectorAll(".user-chats-link").forEach(link => {
-        
-        document.querySelector(".__tab_opened").classList.remove("__tab_opened");
-        document.querySelector(".window__chat-container").classList.add("__tab_opened");
-        
-        document.querySelector(".sidebar").classList.add("__closed");
-        document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
-        
+
         link.onclick = () => {
+
+            document.querySelector(".__tab_opened").classList.remove("__tab_opened");
+            document.querySelector(".window__chat-container").classList.add("__tab_opened");
+
+            document.querySelector(".sidebar").classList.add("__closed");
+            document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
+
             currentChatId = Number(link.dataset.chatId);
             openChat(link.dataset.chatId);
         }
@@ -51,7 +52,7 @@ window.onload = async () => {
 
 
 function openChat(chat_id) {
-    console.log(`https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/${chat_id}`);
+    
     document.querySelector(".window__chat-content").innerHTML = "";
 
     fetch(`https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/${chat_id}`)
@@ -70,7 +71,7 @@ function renderChat(chats_data) {
 
         if (chat_data.is_user) {
             chatRoll.innerHTML +=
-            `
+                `
             <div class="user_message">
                 <div class="user_message__card">
                     <div class="user_message__text">${chat_data.content}</div>
@@ -79,7 +80,7 @@ function renderChat(chats_data) {
             `;
         }
         else {
-            
+
             let mess = chat_data.content;
 
             let sentences = mess.split("\n");
@@ -140,7 +141,7 @@ function renderChat(chats_data) {
                 </div>
             </div>
             `;
-                
+
         }
     });
 }
