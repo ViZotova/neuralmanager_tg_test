@@ -25,7 +25,7 @@
 
                     <div class="filters_modal__window-parameters">
 
-                        <div class="select-container" data-select-id="1">
+                        <div class="select-container filters__select-container" data-select-id="1">
                             <div class="select-header">
                                 <span class="select-label">Исполнитель</span>
                                 <div class="selected-value">Константин Константинопольский (ПТО)</div>
@@ -191,7 +191,7 @@
 
                         <div class="parameters__actions">
                             <div class="parameters__actions-button parameters__actions-accept_button">
-                            Применить
+                                Применить
                             </div>
                             <div class="parameters__actions-button parameters__actions-cancel_button">
                                 Отмена
@@ -260,7 +260,7 @@
                             Библиотека
                         </div>
                     </div>
-                    <div class="sidebar__catalog-link">
+                    <div class="sidebar__catalog-link" id="tasks_link">
                         <div class="catalog-link__icon">
                             <svg width="17" height="20" viewBox="0 0 17 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -410,7 +410,7 @@
                         </div>
                     </div> -->
 
-                    
+
                 </div>
             </div>
             <div class="sidebar__account">
@@ -488,7 +488,8 @@
                             </label>
 
                             <div class="search__input-field__mobile_container">
-                                <input class="search__input-field" id="mobile_search_input" type="text" placeholder="Спросите что-нибудь...">
+                                <input class="search__input-field" id="mobile_search_input" type="text"
+                                    placeholder="Спросите что-нибудь...">
                                 <div class="search__input-voice">
                                     <svg width="16" height="18" viewBox="0 0 16 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -651,19 +652,19 @@
                             <div class="token_info-table__char-value" id="gpt_info_model">gpt-5-nano</div>
                         </div>
                         <div class="token_info-table__char">
-                            <div class="token_info-table__char-name" >Входные токены</div>
+                            <div class="token_info-table__char-name">Входные токены</div>
                             <div class="token_info-table__char-value" id="in_tokens_number">0</div>
                         </div>
                         <div class="token_info-table__char">
-                            <div class="token_info-table__char-name" >Выходные токены</div>
+                            <div class="token_info-table__char-name">Выходные токены</div>
                             <div class="token_info-table__char-value" id="out_tokens_number">0</div>
                         </div>
                         <div class="token_info-table__char">
-                            <div class="token_info-table__char-name" >Стоимость входных токенов, USD</div>
+                            <div class="token_info-table__char-name">Стоимость входных токенов, USD</div>
                             <div class="token_info-table__char-value" id="in_tokens_cost">0.0</div>
                         </div>
                         <div class="token_info-table__char">
-                            <div class="token_info-table__char-name" >Стоимость выходных токенов, USD</div>
+                            <div class="token_info-table__char-name">Стоимость выходных токенов, USD</div>
                             <div class="token_info-table__char-value" id="out_tokens_cost">0.0</div>
                         </div>
                         <div class="token_info-table__char">
@@ -765,98 +766,7 @@
                     </div>
 
                     <div class="window__tasks_list-table">
-                        <div class="tasks_list-table__task">
-                            <h2 class="tasks_list-table__task-title">
-                                Проверка качества поставляемых материалов
-                            </h2>
-                            <div class="tasks_list-table__task-properties">
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Исполнитель
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        Иван Иванов (Главный инженер)
-                                    </div>
-                                </div>
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Дедлайн
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        28 сентября 2025
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tasks_list-table__task">
-                            <h2 class="tasks_list-table__task-title">
-                                Проверка качества поставляемых материалов
-                            </h2>
-                            <div class="tasks_list-table__task-properties">
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Исполнитель
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        Иван Иванов (Главный инженер)
-                                    </div>
-                                </div>
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Дедлайн
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        28 сентября 2025
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tasks_list-table__task">
-                            <h2 class="tasks_list-table__task-title">
-                                Проверка качества поставляемых материалов
-                            </h2>
-                            <div class="tasks_list-table__task-properties">
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Исполнитель
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        Иван Иванов (Главный инженер)
-                                    </div>
-                                </div>
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Дедлайн
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        28 сентября 2025
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tasks_list-table__task">
-                            <h2 class="tasks_list-table__task-title">
-                                Проверка качества поставляемых материалов
-                            </h2>
-                            <div class="tasks_list-table__task-properties">
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Исполнитель
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        Иван Иванов (Главный инженер)
-                                    </div>
-                                </div>
-                                <div class="task-properties__prop">
-                                    <div class="task-properties__prop-name">
-                                        Дедлайн
-                                    </div>
-                                    <div class="task-properties__prop-value">
-                                        28 сентября 2025
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -875,22 +785,6 @@
                     <div class="window__check-info_container">
 
                         <div class="window__check-properties">
-                            <div class="window__check-properties-prop">
-                                <h3>Комментарий</h3>
-                                <p>Нет комментариев</p>
-                            </div>
-                            <div class="window__check-properties-prop">
-                                <h3>Статус</h3>
-                                <p>Завершил</p>
-                            </div>
-                            <div class="window__check-properties-prop">
-                                <h3>Дедлайн</h3>
-                                <p>28 марта 2024</p>
-                            </div>
-                            <div class="window__check-properties-prop">
-                                <h3>Файл</h3>
-                                <p>Нет файла</p>
-                            </div>
                             <div class="window__check-properties-prop">
                                 <h3>Комментарий</h3>
                                 <p>Нет комментариев</p>
@@ -937,11 +831,197 @@
 
                 </div>
 
+                <!-- Tasks Page -->
+
+                <div class="window__tasks __tab" data-tab-id="7">
+                    <div class="window__tasks-task">
+                        <div class="task__header">
+                            <h1>
+                                Задача #1
+                            </h1>
+                        </div>
+                        <div class="task__body">
+                            <div class="task__name">
+                                Обновление парка рабочих станций
+                            </div>
+                            <div class="task__text">
+                                Провести аудит рабочихстанций, определить потребностив обновлении
+                            </div>
+                            <div class="task__select">
+                                <div class="select-container" data-select-id="1">
+                                    <div class="select-header">
+                                        <span class="select-label">Исполнитель</span>
+                                        <div class="selected-value">Константин Константинопольский (ПТО)</div>
+                                        <span class="dropdown-arrow">
+                                            <svg width="13" height="7" viewBox="0 0 13 7" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M6.56641 6.70801C6.38867 6.70801 6.23145 6.63965 6.10156 6.50977L0.810547 1.0957C0.694336 0.972656 0.625977 0.822266 0.625977 0.651367C0.625977 0.295898 0.892578 0.0224609 1.24805 0.0224609C1.42578 0.0224609 1.58301 0.0908203 1.69238 0.200195L6.56641 5.17676L11.4336 0.200195C11.5498 0.0908203 11.707 0.0224609 11.8779 0.0224609C12.2334 0.0224609 12.5 0.295898 12.5 0.651367C12.5 0.822266 12.4316 0.972656 12.3154 1.08887L7.02441 6.50977C6.9082 6.63965 6.7373 6.70801 6.56641 6.70801Z"
+                                                    fill="#8E8E93" />
+                                            </svg>
+                                        </span>
+                                    </div>
+
+                                    <div class="select-dropdown">
+                                        <div class="search-container">
+                                            <input type="text" placeholder="Поиск..." class="search-input">
+                                        </div>
+
+                                        <div class="options-list">
+                                            <div class="option-item selected">
+                                                Константин Константинопольский (ПТО)
+                                            </div>
+                                            <div class="option-item">
+                                                Иван Иванов (ОТК)
+                                            </div>
+                                            <div class="option-item">
+                                                Петр Петров (ПТО)
+                                            </div>
+                                            <div class="option-item">
+                                                Мария Сидорова (ОТК)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="task__date">
+                                28.08.2025
+                            </div>
+                            <div class="task__file">
+                                Выбрать файл
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="window__tasks-task">
+                        <div class="task__header">
+                            <h1>
+                                Задача #1
+                            </h1>
+                        </div>
+                        <div class="task__body">
+                            <div class="task__name">
+                                Обновление парка рабочих станций
+                            </div>
+                            <div class="task__text">
+                                Провести аудит рабочихстанций, определить потребностив обновлении
+                            </div>
+                            <div class="task__select">
+                                <div class="select-container" data-select-id="1">
+                                    <div class="select-header">
+                                        <span class="select-label">Исполнитель</span>
+                                        <div class="selected-value">Константин Константинопольский (ПТО)</div>
+                                        <span class="dropdown-arrow">
+                                            <svg width="13" height="7" viewBox="0 0 13 7" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M6.56641 6.70801C6.38867 6.70801 6.23145 6.63965 6.10156 6.50977L0.810547 1.0957C0.694336 0.972656 0.625977 0.822266 0.625977 0.651367C0.625977 0.295898 0.892578 0.0224609 1.24805 0.0224609C1.42578 0.0224609 1.58301 0.0908203 1.69238 0.200195L6.56641 5.17676L11.4336 0.200195C11.5498 0.0908203 11.707 0.0224609 11.8779 0.0224609C12.2334 0.0224609 12.5 0.295898 12.5 0.651367C12.5 0.822266 12.4316 0.972656 12.3154 1.08887L7.02441 6.50977C6.9082 6.63965 6.7373 6.70801 6.56641 6.70801Z"
+                                                    fill="#8E8E93" />
+                                            </svg>
+                                        </span>
+                                    </div>
+
+                                    <div class="select-dropdown">
+                                        <div class="search-container">
+                                            <input type="text" placeholder="Поиск..." class="search-input">
+                                        </div>
+
+                                        <div class="options-list">
+                                            <div class="option-item selected">
+                                                Константин Константинопольский (ПТО)
+                                            </div>
+                                            <div class="option-item">
+                                                Иван Иванов (ОТК)
+                                            </div>
+                                            <div class="option-item">
+                                                Петр Петров (ПТО)
+                                            </div>
+                                            <div class="option-item">
+                                                Мария Сидорова (ОТК)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="task__date">
+                                28.08.2025
+                            </div>
+                            <div class="task__file">
+                                Выбрать файл
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="window__tasks-task">
+                        <div class="task__header">
+                            <h1>
+                                Задача #1
+                            </h1>
+                        </div>
+                        <div class="task__body">
+                            <div class="task__name">
+                                Обновление парка рабочих станций
+                            </div>
+                            <div class="task__text">
+                                Провести аудит рабочихстанций, определить потребностив обновлении
+                            </div>
+                            <div class="task__select">
+                                <div class="select-container" data-select-id="1">
+                                    <div class="select-header">
+                                        <span class="select-label">Исполнитель</span>
+                                        <div class="selected-value">Константин Константинопольский (ПТО)</div>
+                                        <span class="dropdown-arrow">
+                                            <svg width="13" height="7" viewBox="0 0 13 7" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M6.56641 6.70801C6.38867 6.70801 6.23145 6.63965 6.10156 6.50977L0.810547 1.0957C0.694336 0.972656 0.625977 0.822266 0.625977 0.651367C0.625977 0.295898 0.892578 0.0224609 1.24805 0.0224609C1.42578 0.0224609 1.58301 0.0908203 1.69238 0.200195L6.56641 5.17676L11.4336 0.200195C11.5498 0.0908203 11.707 0.0224609 11.8779 0.0224609C12.2334 0.0224609 12.5 0.295898 12.5 0.651367C12.5 0.822266 12.4316 0.972656 12.3154 1.08887L7.02441 6.50977C6.9082 6.63965 6.7373 6.70801 6.56641 6.70801Z"
+                                                    fill="#8E8E93" />
+                                            </svg>
+                                        </span>
+                                    </div>
+
+                                    <div class="select-dropdown">
+                                        <div class="search-container">
+                                            <input type="text" placeholder="Поиск..." class="search-input">
+                                        </div>
+
+                                        <div class="options-list">
+                                            <div class="option-item selected">
+                                                Константин Константинопольский (ПТО)
+                                            </div>
+                                            <div class="option-item">
+                                                Иван Иванов (ОТК)
+                                            </div>
+                                            <div class="option-item">
+                                                Петр Петров (ПТО)
+                                            </div>
+                                            <div class="option-item">
+                                                Мария Сидорова (ОТК)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="task__date">
+                                28.08.2025
+                            </div>
+                            <div class="task__file">
+                                Выбрать файл
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
 
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/get-tasks.js"></script>
     <script src="assets/js/tokens-data.js"></script>
     <script src="assets/js/click-handlers.js"></script>
     <script src="assets/js/send-message.js"></script>

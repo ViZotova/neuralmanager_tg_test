@@ -81,7 +81,7 @@ function renderChat(chats_data) {
         }
         else {
 
-            let mess = chat_data.content;
+            let mess = chat_data.content.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 
             let sentences = mess.split("\n");
 
@@ -144,8 +144,10 @@ function renderChat(chats_data) {
 
         }
     });
-}
-
-function copyMessage(id) {
-    // по chat-id будем копировать сообщение
+    
+    document.querySelectorAll(".gpt_message__footer-btn").forEach(copyBtn => {
+        copyBtn.onclick = () => {
+            navigator.clipboard.writeText(copyBtn.parentNode.parentNode.innerText);
+        };
+    });
 }

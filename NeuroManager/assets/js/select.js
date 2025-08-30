@@ -2,16 +2,16 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    let selectsNumber = document.querySelectorAll(".select-container").length;
+    let selectsNumber = document.querySelectorAll(".filters__select-container").length;
 
     for (let i = 1; i <= selectsNumber; i++) {
 
-        const selectContainer = document.querySelector(`.select-container[data-select-id="${i}"]`);
-        const selectHeader = document.querySelector(`.select-container[data-select-id="${i}"] .select-header`);
-        const dropdown = document.querySelector(`.select-container[data-select-id="${i}"] .select-dropdown`);
-        const options = document.querySelectorAll(`.select-container[data-select-id="${i}"] .option-item`);
-        const searchInput = document.querySelector(`.select-container[data-select-id="${i}"] .search-input`);
-        const selectedValue = document.querySelector(`.select-container[data-select-id="${i}"] .selected-value`);
+        const selectContainer = document.querySelector(`.filters__select-container[data-select-id="${i}"]`);
+        const selectHeader = document.querySelector(`.filters__select-container[data-select-id="${i}"] .select-header`);
+        const dropdown = document.querySelector(`.filters__select-container[data-select-id="${i}"] .select-dropdown`);
+        const options = document.querySelectorAll(`.filters__select-container[data-select-id="${i}"] .option-item`);
+        const searchInput = document.querySelector(`.filters__select-container[data-select-id="${i}"] .search-input`);
+        const selectedValue = document.querySelector(`.filters__select-container[data-select-id="${i}"] .selected-value`);
 
         // Открытие/закрытие dropdown
         selectHeader.addEventListener('click', function (e) {

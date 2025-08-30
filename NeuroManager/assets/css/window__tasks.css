@@ -1,0 +1,136 @@
+/* <div class="window__tasks __tab __tab_opened" data-tab-id="7">
+        <div class="window__tasks-task">
+            <div class="task__header">
+                <h1>
+                    Задача #1
+                </h1>
+            </div>
+            <div class="task__body">
+                <div class="task__name">
+                    Обновление парка рабочих станций
+                </div>
+                <div class="task__text">
+                    Провести аудит рабочихстанций, определить потребностив обновлении
+                </div>
+                <div class="task__select">
+                    <div class="select-container" data-select-id="1">
+                        <div class="select-header">
+                            <span class="select-label">Исполнитель</span>
+                            <div class="selected-value">Конс */
+
+.window__tasks {
+    padding-top: 32px;
+    padding-bottom: 32px;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.window__tasks-task {
+    width: 100%;
+}
+
+.window__tasks .task__body {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    border-bottom: 1px solid #E6E9ED;
+}
+
+.window__tasks-task .task__header {
+    width: 100%;
+    margin-bottom: 24px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.window__tasks .window__tasks-task h1 {
+    font-weight: 600;
+    font-size: 2.4rem;
+    line-height: 2.1rem;
+    margin-left: 16px;
+
+}
+
+.window__tasks-task .task__name {
+    height: 54px;
+    width: 100%;
+    border-radius: 14px;
+    background-color: var(--card-grey);
+
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    font-size: 1.6rem;
+    line-height: 2.1rem;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.window__tasks-task .task__text {
+
+    min-height: 141px;
+    width: 100%;
+    border-radius: 14px;
+    background-color: var(--card-grey);
+
+    display: flex;
+    padding: 8px 16px;
+    font-size: 1.6rem;
+    line-height: 2.1rem;
+}
+
+.window__tasks-task .task__select {
+    width: 100%;
+}
+
+.window__tasks-task .task__date {
+    height: 54px;
+    width: 100%;
+    border-radius: 14px;
+    background-color: var(--card-grey);
+
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    font-size: 1.6rem;
+    line-height: 2.1rem;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.window__tasks-task .task__file {
+    height: 56px;
+    width: 100%;
+    border-radius: 512px;
+    background-color: var(--card-grey);
+    color: var(--light-text);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 16px;
+    margin-bottom: 32px;
+
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 2.1rem;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

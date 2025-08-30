@@ -25,7 +25,7 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
         </div>
         `;
 
-        await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/", {
+        await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -33,7 +33,8 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
 
             body: JSON.stringify({
                 chat_id: currentChatId,
-                content: String(messageText)
+                prompt: String(messageText),
+                tg_id: 5254325840
             })
         })
             .then(res => res.json())
@@ -42,7 +43,7 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
                 let typingMarker = chatRoll.lastChild.previousElementSibling;
                 chatRoll.removeChild(typingMarker);
 
-                mess = res.message;
+                mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
             });
 
 
@@ -134,7 +135,7 @@ document.querySelector("#mobile_search_btn").onclick = async () => {
         </div>
         `;
 
-        await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/", {
+        await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -142,12 +143,13 @@ document.querySelector("#mobile_search_btn").onclick = async () => {
 
             body: JSON.stringify({
                 chat_id: currentChatId,
-                content: String(messageText)
+                prompt: String(messageText),
+                tg_id: 5254325840
             })
         })
             .then(res => res.json())
             .then(res => {
-                mess = res.message;
+                mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 
                 let typingMarker = chatRoll.lastChild.previousElementSibling;
                 chatRoll.removeChild(typingMarker);

@@ -48,6 +48,20 @@ document.querySelector("#newchat_link").onclick = () => {
     currentChatId = -1;
 };
 
+document.querySelector("#tasks_link").onclick = () => {
+    document.querySelector(".__tab_opened").classList.remove("__tab_opened");
+    document.querySelector(".window__tasks_list").classList.add("__tab_opened");
+    
+    document.querySelector(".sidebar").classList.add("__closed");
+    document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
+
+    getTasks();
+};
+
+document.querySelector(".tasks_list-header__actions-filters").onclick = () => {
+    document.querySelector(".filters_modal").classList.add("__modal_opened");
+};
+
 document.querySelector(".search__input-plus").onclick = () => {
 
 };

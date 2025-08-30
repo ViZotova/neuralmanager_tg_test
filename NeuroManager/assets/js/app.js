@@ -6,6 +6,7 @@ window.addEventListener('load', (event) => {
 
     // Сохраняем userId в localStorage
     const userId = tg.initDataUnsafe.user?.id;
+    alert(userId);
 
     if (userId) {
         localStorage.setItem("userId", userId);
