@@ -13,3 +13,6 @@
 //         console.error("User ID не найден в initDataUnsafe.");
 //     }
 // });
+
+let currentChatId = -1;
+

@@ -334,6 +334,12 @@
     display: none;
 }
 
+.gpt_typing_marker {
+    font-size: 1.6rem;
+    line-height: 2rem;
+    padding: 8px 16px;
+}
+
 @keyframes message_appear {
     0% {
         opacity: 0%;

@@ -42,6 +42,10 @@ document.querySelector("#newchat_link").onclick = () => {
     
     document.querySelector(".sidebar").classList.add("__closed");
     document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
+
+    chatRoll.innerHTML = "";
+
+    currentChatId = -1;
 };
 
 document.querySelector(".search__input-plus").onclick = () => {
