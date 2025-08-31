@@ -1,19 +1,13 @@
-// window.addEventListener('load', (event) => {
-//     const tg = window.Telegram.WebApp;
-//     tg.ready(); // Подготовка WebApp
-//     tg.expand(); // Разворачиваем WebApp
-//     tg.disableVerticalSwipes();
+const menuButton = document.querySelector(".window__header-sidebar_button");
 
-//     // Сохраняем userId в localStorage
-//     const userId = tg.initDataUnsafe.user?.id;
-//     alert(userId);
-
-//     if (userId) {
-//         localStorage.setItem("userId", userId);
-//         alert("User ID сохранен:", userId);
-//     } else {
-//         console.error("User ID не найден в initDataUnsafe.");
-//     }
-// });
+menuButton.addEventListener('click', () => {
+    try {
+        const userId = window.Telegram.WebApp.initDataUnsafe?.user?.id || localStorage.getItem('userId');
+    }
+    catch {
+        alert("Запустите приложение в Telegram");
+    }
+    alert(userId);
+});
 
 let currentChatId = -1;
