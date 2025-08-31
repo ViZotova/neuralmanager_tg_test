@@ -6,14 +6,42 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
     let messageText = document.querySelector("#desktop_search_input").value;
     document.querySelector("#desktop_search_input").value = '';
 
+    
+
     if (messageText.trim() !== "") {
 
-        chatRoll.innerHTML +=
+        const fileInput = document.querySelector(".chat-search__input input[type='file']");
+        console.log(fileInput)
+        const formData = new FormData();
+
+        formData.append('tg_id', app_tg_id);
+        formData.append('prompt', String(messageText));
+
+        if (fileInput.files[0]) {
+            chatRoll.innerHTML +=
+            `<div class="user_message">
+                <div class="user_message__file">
+                    <div class="user_message__file-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M304 112L192 112C183.2 112 176 119.2 176 128L176 512C176 520.8 183.2 528 192 528L448 528C456.8 528 464 520.8 464 512L464 272L376 272C336.2 272 304 239.8 304 200L304 112zM444.1 224L352 131.9L352 200C352 213.3 362.7 224 376 224L444.1 224zM128 128C128 92.7 156.7 64 192 64L325.5 64C342.5 64 358.8 70.7 370.8 82.7L493.3 205.3C505.3 217.3 512 233.6 512 250.6L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 128z"/></svg>
+                    </div>
+                    <div class="user_message__file-data">
+                        <h3>${fileInput.files[0].name}</h3>
+                        <p>Файл</p>
+                    </div>
+                </div>
+                <div class="user_message__card">
+                    <div class="user_message__text">${messageText}</div>
+                </div>
+            </div>`;
+        }
+        else {
+            chatRoll.innerHTML +=
             `<div class="user_message">
                 <div class="user_message__card">
                     <div class="user_message__text">${messageText}</div>
                 </div>
             </div>`;
+        }
 
 
         let mess = '';
@@ -24,14 +52,6 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
             Печатает...
         </div>
         `;
-
-
-        const fileInput = document.querySelector(".chat-search__input input[type='file']");
-        console.log(fileInput)
-        const formData = new FormData();
-
-        formData.append('tg_id', app_tg_id);
-        formData.append('prompt', String(messageText));
 
         // Добавляем опциональные поля, если они заполнены
         // if (chat_id) formData.append('chat_id', 1);
@@ -142,13 +162,39 @@ document.querySelector("#mobile_search_btn").onclick = async () => {
     document.querySelector("#mobile_search_input").value = '';
 
     if (messageText.trim() !== "") {
-        chatRoll.innerHTML +=
+
+        const fileInput = document.querySelector(".__mobile__chat-search__input input[type='file']");
+        console.log(fileInput)
+        const formData = new FormData();
+
+        formData.append('tg_id', app_tg_id);
+        formData.append('prompt', String(messageText));
+
+        if (fileInput.files[0]) {
+            chatRoll.innerHTML +=
+            `<div class="user_message">
+                <div class="user_message__file">
+                    <div class="user_message__file-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M304 112L192 112C183.2 112 176 119.2 176 128L176 512C176 520.8 183.2 528 192 528L448 528C456.8 528 464 520.8 464 512L464 272L376 272C336.2 272 304 239.8 304 200L304 112zM444.1 224L352 131.9L352 200C352 213.3 362.7 224 376 224L444.1 224zM128 128C128 92.7 156.7 64 192 64L325.5 64C342.5 64 358.8 70.7 370.8 82.7L493.3 205.3C505.3 217.3 512 233.6 512 250.6L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 128z"/></svg>
+                    </div>
+                    <div class="user_message__file-data">
+                        <h3>${fileInput.files[0].name}</h3>
+                        <p>Файл</p>
+                    </div>
+                </div>
+                <div class="user_message__card">
+                    <div class="user_message__text">${messageText}</div>
+                </div>
+            </div>`;
+        }
+        else {
+            chatRoll.innerHTML +=
             `<div class="user_message">
                 <div class="user_message__card">
                     <div class="user_message__text">${messageText}</div>
                 </div>
             </div>`;
-
+        }
 
         let mess = '';
 
@@ -159,24 +205,30 @@ document.querySelector("#mobile_search_btn").onclick = async () => {
         </div>
         `;
 
-        await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+        // Добавляем опциональные поля, если они заполнены
+        // if (chat_id) formData.append('chat_id', 1);
+        // if (project_id) formData.append('project_id', project_id);
 
-            body: JSON.stringify({
-                chat_id: currentChatId,
-                prompt: String(messageText),
-                tg_id: 5254325840
-            })
+        // Добавляем файл, если выбран
+        if (fileInput.files[0]) {
+            formData.append('file', fileInput.files[0]);
+            console.log(fileInput.files[0]);
+        }
+
+        // Отправляем запрос
+        await fetch('https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all', {
+            method: 'POST',
+            body: formData
         })
             .then(res => res.json())
             .then(res => {
-                mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 
                 let typingMarker = chatRoll.lastChild.previousElementSibling;
                 chatRoll.removeChild(typingMarker);
+
+                console.log(res);
+
+                mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
             });
 
         let sentences = mess.split("\n");

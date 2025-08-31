@@ -1,1 +1,0 @@
-// https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/{chat_id}

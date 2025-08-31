@@ -257,7 +257,60 @@
 .window__chat-content .user_message {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.user_message__file {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #e6e6e6;
+
+    display: flex;
+    gap: 8px;
+
+    border-radius: 14px;
+    margin-bottom: 10px;
+}
+.user_message__file-icon {
+    height: 45px;
+    width: 45px;
+    border-radius: 12px;
+    background-color: #198cde;
+
+    flex-basis: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.user_message__file-icon svg {
+    width: 30px;
+    fill: #ffffff;
+}
+.user_message__file-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+}
+.user_message__file-data h3 {
+    line-height: 2rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    max-width: 200px;
+}
+.user_message__file-data p {
+    line-height: 2rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--light-text);
 }
 
 .window__chat-content .user_message__card {

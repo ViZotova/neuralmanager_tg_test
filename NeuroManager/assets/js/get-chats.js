@@ -52,7 +52,7 @@ window.onload = async () => {
 
 
 function openChat(chat_id) {
-    
+
     document.querySelector(".window__chat-content").innerHTML = "";
 
     fetch(`https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/${chat_id}`)
@@ -69,15 +69,40 @@ function renderChat(chats_data) {
     let chatRoll = document.querySelector(".window__chat-content");
     chats_data.forEach(chat_data => {
 
+        console.log(chat_data);
+
         if (chat_data.is_user) {
-            chatRoll.innerHTML +=
-                `
-            <div class="user_message">
-                <div class="user_message__card">
-                    <div class="user_message__text">${chat_data.content}</div>
-                </div>
-            </div>
-            `;
+            if (chat_data.file_path) {
+                chatRoll.innerHTML +=
+                    `
+                            <div class="user_message">
+                                <div class="user_message__file">
+                                    <div class="user_message__file-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M304 112L192 112C183.2 112 176 119.2 176 128L176 512C176 520.8 183.2 528 192 528L448 528C456.8 528 464 520.8 464 512L464 272L376 272C336.2 272 304 239.8 304 200L304 112zM444.1 224L352 131.9L352 200C352 213.3 362.7 224 376 224L444.1 224zM128 128C128 92.7 156.7 64 192 64L325.5 64C342.5 64 358.8 70.7 370.8 82.7L493.3 205.3C505.3 217.3 512 233.6 512 250.6L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 128z"/></svg>
+                                    </div>
+                                    <div class="user_message__file-data">
+                                        <h3>${getFileNameFromPath(chat_data.file_path)}</h3>
+                                        <p>Файл</p>
+                                    </div>
+                                </div>
+                                <div class="user_message__card">
+                                    <div class="user_message__text">${chat_data.content}</div>
+                                </div>
+                            </div>
+                            `;
+            }
+            else {
+                chatRoll.innerHTML +=
+                    `
+                            <div class="user_message">
+                                <div class="user_message__card">
+                                    <div class="user_message__text">${chat_data.content}</div>
+                                </div>
+                            </div>
+                            `;
+            }
+
+
         }
         else {
 
@@ -144,10 +169,18 @@ function renderChat(chats_data) {
 
         }
     });
-    
+
     document.querySelectorAll(".gpt_message__footer-btn").forEach(copyBtn => {
         copyBtn.onclick = () => {
             navigator.clipboard.writeText(copyBtn.parentNode.parentNode.innerText);
         };
     });
+}
+
+function getFileNameFromPath(filePath) {
+    const lastIndex = filePath.lastIndexOf('/');
+    if (lastIndex === -1) {
+        return filePath; // Если '/' не найден, возвращаем всю строку (это может быть просто имя файла)
+    }
+    return filePath.substring(lastIndex + 1);
 }
