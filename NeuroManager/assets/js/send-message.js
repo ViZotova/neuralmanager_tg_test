@@ -25,17 +25,28 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
         </div>
         `;
 
-        await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
 
-            body: JSON.stringify({
-                chat_id: currentChatId,
-                prompt: String(messageText),
-                tg_id: 5254325840
-            })
+        const fileInput = document.querySelector(".chat-search__input input[type='file']");
+        console.log(fileInput)
+        const formData = new FormData();
+
+        formData.append('tg_id', app_tg_id);
+        formData.append('prompt', String(messageText));
+
+        // Добавляем опциональные поля, если они заполнены
+        // if (chat_id) formData.append('chat_id', 1);
+        // if (project_id) formData.append('project_id', project_id);
+
+        // Добавляем файл, если выбран
+        if (fileInput.files[0]) {
+            formData.append('file', fileInput.files[0]);
+            console.log(fileInput.files[0]);
+        }
+
+        // Отправляем запрос
+        await fetch('https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all', {
+            method: 'POST',
+            body: formData
         })
             .then(res => res.json())
             .then(res => {
@@ -43,10 +54,23 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
                 let typingMarker = chatRoll.lastChild.previousElementSibling;
                 chatRoll.removeChild(typingMarker);
 
-                mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+                console.log(res);
+
+                mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
             });
 
+        // await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
 
+        //     body: JSON.stringify({
+        //         chat_id: currentChatId,
+        //         prompt: String(messageText),
+        //         tg_id: 5254325840
+        //     })
+        // })
 
         let sentences = mess.split("\n");
 

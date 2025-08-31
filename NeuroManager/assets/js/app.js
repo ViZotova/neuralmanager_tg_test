@@ -11,3 +11,4 @@ menuButton.addEventListener('click', () => {
 });
 
 let currentChatId = -1;
+let app_tg_id = 5254325840;
