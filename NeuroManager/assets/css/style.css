@@ -8,7 +8,8 @@
 @import url(./general_settings.css);
 @import url(./tasks_list.css);
 @import url(./check.css);
-@import url(./window__tasks.css);
+@import url(./window_tasks.css);
+@import url(./edit_task.css);
 
 @import url(./filter_popup.css);
 

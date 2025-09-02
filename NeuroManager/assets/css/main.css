@@ -45,11 +45,18 @@
     margin-bottom: 64px;
 }
 
+.sidebar ::-webkit-scrollbar {
+    opacity: 0;
+    display: none;
+}
+
 .sidebar__catalog-chats {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 3rem;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .sidebar__catalog-link {

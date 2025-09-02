@@ -1,0 +1,23 @@
+.window__edit_task {
+    padding-top: 32px;
+}
+.window__edit_task .task__header {
+    
+    width: 100%;
+    margin-bottom: 24px;
+
+    display: flex;
+    justify-content: space-between;
+}
+.window__edit_task .window__tasks-task h1 {
+    font-weight: 600;
+    font-size: 2.4rem;
+    line-height: 2.1rem;
+    margin-left: 16px;
+}
+
+.window__edit_task .task__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}

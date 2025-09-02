@@ -1,11 +1,4 @@
-document.querySelectorAll(".catalog-folder__header").forEach(folder => {
 
-    folder.onclick = () => {        
-        let folderID = folder.dataset.folderOrder;
-
-        document.querySelector(`.sidebar__catalog-folder[data-folder-order='${folderID}'`).classList.toggle("__expanded");
-    };
-});
 
 document.querySelector(".window__header-sidebar_button").onclick = () => {
     document.querySelector(".sidebar").classList.remove("__closed");

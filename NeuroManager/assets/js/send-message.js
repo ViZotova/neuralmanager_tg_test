@@ -6,16 +6,19 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
     let messageText = document.querySelector("#desktop_search_input").value;
     document.querySelector("#desktop_search_input").value = '';
 
-    
 
     if (messageText.trim() !== "") {
 
         const fileInput = document.querySelector(".chat-search__input input[type='file']");
-        console.log(fileInput)
+        // console.log(fileInput);
         const formData = new FormData();
 
         formData.append('tg_id', app_tg_id);
         formData.append('prompt', String(messageText));
+
+        if (currentChatId >= 0) {
+            formData.append('chat_id', currentChatId);
+        }
 
         if (fileInput.files[0]) {
             chatRoll.innerHTML +=
@@ -60,7 +63,9 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
         // Добавляем файл, если выбран
         if (fileInput.files[0]) {
             formData.append('file', fileInput.files[0]);
-            console.log(fileInput.files[0]);
+            // console.log(fileInput.files[0]);
+
+            fileInput.value = "";
         }
 
         // Отправляем запрос
@@ -74,9 +79,16 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
                 let typingMarker = chatRoll.lastChild.previousElementSibling;
                 chatRoll.removeChild(typingMarker);
 
-                console.log(res);
+                if (res.message.chat_id) {
+                    currentChatId = res.message.chat_id;
+                }
 
-                mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+                if (res.message.message) {
+                    mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+                }
+                else {
+                    mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+                }
             });
 
         // await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all", {
@@ -164,12 +176,16 @@ document.querySelector("#mobile_search_btn").onclick = async () => {
     if (messageText.trim() !== "") {
 
         const fileInput = document.querySelector(".__mobile__chat-search__input input[type='file']");
-        console.log(fileInput)
+        // console.log(fileInput)
         const formData = new FormData();
 
         formData.append('tg_id', app_tg_id);
         formData.append('prompt', String(messageText));
 
+        if (currentChatId >= 0) {
+            formData.append('chat_id', currentChatId);
+        }
+        
         if (fileInput.files[0]) {
             chatRoll.innerHTML +=
             `<div class="user_message">
@@ -212,7 +228,9 @@ document.querySelector("#mobile_search_btn").onclick = async () => {
         // Добавляем файл, если выбран
         if (fileInput.files[0]) {
             formData.append('file', fileInput.files[0]);
-            console.log(fileInput.files[0]);
+            // console.log(fileInput.files[0]);
+
+            fileInput.value = "";
         }
 
         // Отправляем запрос
@@ -226,9 +244,16 @@ document.querySelector("#mobile_search_btn").onclick = async () => {
                 let typingMarker = chatRoll.lastChild.previousElementSibling;
                 chatRoll.removeChild(typingMarker);
 
-                console.log(res);
-
-                mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+                if (res.message.chat_id) {
+                    currentChatId = res.message.chat_id;
+                }
+                
+                if (res.message.message) {
+                    mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+                }
+                else {
+                    mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+                }
             });
 
         let sentences = mess.split("\n");

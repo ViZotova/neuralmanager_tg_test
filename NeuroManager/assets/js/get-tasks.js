@@ -113,7 +113,7 @@ async function openTask(id) {
                 </div>
 
                 <div class="window__check-buttons">
-                    <button class="window__check-buttons__change_button">
+                    <button class="window__check-buttons__change_button" onclick="editTask(${id})">
                         Изменить
                     </button>
                     <button class="window__check-buttons__back_button">
@@ -125,5 +125,81 @@ async function openTask(id) {
             document.querySelector(".window__check-buttons__back_button").onclick = () => {
                 document.querySelector("#tasks_link").click();
             }
+        });
+}
+
+function editTask(id) {
+    fetch(`https://ai-meneger-edward0076.amvera.io/tasks/${id}`)
+        .then(res => res.json())
+        .then(res => {
+
+            console.log(res);
+
+            document.querySelector(".__tab_opened").classList.remove("__tab_opened");
+            document.querySelector(".window__edit_task").classList.add("__tab_opened");
+
+            document.querySelector(".window__edit_task").innerHTML =
+                `
+                <div class="window__tasks-task">
+                    <div class="task__header">
+                        <h1>
+                            Редактирование задачи "${res.title}"
+                        </h1>
+                    </div>
+                    <div class="task__body">
+                        <div class="task__name">
+                            ${res.title}
+                        </div>
+                        <div class="task__text">
+                            ${res.description}
+                        </div>
+                        <div class="task__select">
+                            <div class="select-container" data-select-id="1">
+                                <div class="select-header">
+                                    <span class="select-label">Исполнитель</span>
+                                    <div class="selected-value">${res.executor.name}</div>
+                                    <span class="dropdown-arrow">
+                                        <svg width="13" height="7" viewBox="0 0 13 7" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M6.56641 6.70801C6.38867 6.70801 6.23145 6.63965 6.10156 6.50977L0.810547 1.0957C0.694336 0.972656 0.625977 0.822266 0.625977 0.651367C0.625977 0.295898 0.892578 0.0224609 1.24805 0.0224609C1.42578 0.0224609 1.58301 0.0908203 1.69238 0.200195L6.56641 5.17676L11.4336 0.200195C11.5498 0.0908203 11.707 0.0224609 11.8779 0.0224609C12.2334 0.0224609 12.5 0.295898 12.5 0.651367C12.5 0.822266 12.4316 0.972656 12.3154 1.08887L7.02441 6.50977C6.9082 6.63965 6.7373 6.70801 6.56641 6.70801Z"
+                                                fill="#8E8E93" />
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <div class="select-dropdown">
+                                    <div class="search-container">
+                                        <input type="text" placeholder="Поиск..." class="search-input">
+                                    </div>
+
+                                    <div class="options-list">
+                                        <div class="option-item selected">
+                                            ${res.executor.name}
+                                        </div>
+                                        <div class="option-item">
+                                            Иван Иванов (ОТК)
+                                        </div>
+                                        <div class="option-item">
+                                            Петр Петров (ПТО)
+                                        </div>
+                                        <div class="option-item">
+                                            Мария Сидорова (ОТК)
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="task__date">
+                            28.08.2025
+                        </div>
+                        <div class="task__file">
+                            Выбрать файл
+                        </div>
+                    </div>
+                </div>
+            `
+
         });
 }
