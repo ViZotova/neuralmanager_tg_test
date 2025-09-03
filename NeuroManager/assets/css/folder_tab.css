@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 .folder_observe__folder_name {
     display: flex;
     align-items: center;

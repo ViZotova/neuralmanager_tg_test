@@ -2,7 +2,7 @@ async function openProject(projectID) {
 
     await fetch(`https://ai-meneger-edward0076.amvera.io/projects/${projectID}`)
         .then(projectData => projectData.json())
-        .then(projectData => {
+        .then(async (projectData) => {
             console.log(projectData);
 
             document.querySelector(".window__folder_observe").innerHTML =
@@ -17,15 +17,20 @@ async function openProject(projectID) {
             </div>
 
             <div class="chat-search__input">
-                <div class="search__input-plus">
-                    <svg width="13" height="14" viewBox="0 0 13 14" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M-0.0078125 7.35938C-0.0078125 6.97656 0.3125 6.65625 0.6875 6.65625H5.74219V1.60938C5.74219 1.23438 6.05469 0.914062 6.4375 0.914062C6.82031 0.914062 7.14062 1.23438 7.14062 1.60938V6.65625H12.1875C12.5625 6.65625 12.8828 6.97656 12.8828 7.35938C12.8828 7.74219 12.5625 8.05469 12.1875 8.05469H7.14062V13.1094C7.14062 13.4844 6.82031 13.8047 6.4375 13.8047C6.05469 13.8047 5.74219 13.4844 5.74219 13.1094V8.05469H0.6875C0.3125 8.05469 -0.0078125 7.74219 -0.0078125 7.35938Z"
-                            fill="black" />
-                    </svg>
-                </div>
-                <input class="search__input-field" type="text" placeholder="Новый чат в ${projectData.title}">
+                <label>
+                    <input type="file" id="observe_input" />
+                    <div class="search__input-plus">
+                        <svg width="13" height="14" viewBox="0 0 13 14" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M-0.0078125 7.35938C-0.0078125 6.97656 0.3125 6.65625 0.6875 6.65625H5.74219V1.60938C5.74219 1.23438 6.05469 0.914062 6.4375 0.914062C6.82031 0.914062 7.14062 1.23438 7.14062 1.60938V6.65625H12.1875C12.5625 6.65625 12.8828 6.97656 12.8828 7.35938C12.8828 7.74219 12.5625 8.05469 12.1875 8.05469H7.14062V13.1094C7.14062 13.4844 6.82031 13.8047 6.4375 13.8047C6.05469 13.8047 5.74219 13.4844 5.74219 13.1094V8.05469H0.6875C0.3125 8.05469 -0.0078125 7.74219 -0.0078125 7.35938Z"
+                                fill="black" />
+                        </svg>
+                    </div>
+                </label>
+
+                <input class="search__input-field" type="text" id="project_message_input" placeholder="Новый чат в ${projectData.title}">
+
                 <div class="search__input-voice">
                     <svg width="12" height="18" viewBox="0 0 12 18" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +39,7 @@ async function openProject(projectID) {
                             fill="black" />
                     </svg>
                 </div>
-                <div class="search__input-send_button">
+                <div class="search__input-send_button" id="observe_send_message">
                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <circle cx="15" cy="15" r="15" fill="black" />
@@ -58,56 +63,66 @@ async function openProject(projectID) {
             </div>
 
             <div class="folder_observe__folders_list">
-                <div class="folder_observe__folders_list-card">
-                    <div class="folders_list-card__content">
-                        <h2>Разница экскаваторов JCB</h2>
-                        <p>В чем разница экскаваторов jcb 3cx, 4cx, 5cx Lorem ipsum dolor sit amet.</p>
-                    </div>
-                    <div class="folders_list-card__date">24 авг.</div>
-                </div>
-                <div class="folder_observe__folders_list-card">
-                    <div class="folders_list-card__content">
-                        <h2>Контакты лизинговых организаций</h2>
-                        <p>Найди контакты лизинговых организаций</p>
-                    </div>
-                    <div class="folders_list-card__date">22 авг.</div>
-                </div>
-                <div class="folder_observe__folders_list-card">
-                    <div class="folders_list-card__content">
-                        <h2>Разница экскаваторов JCB</h2>
-                        <p>Hyundai hx220s</p>
-                    </div>
-                    <div class="folders_list-card__date">20 авг.</div>
-                </div>
-                <div class="folder_observe__folders_list-card">
-                    <div class="folders_list-card__content">
-                        <h2>Разница экскаваторов JCB</h2>
-                        <p>В чем разница экскаваторов jcb 3cx, 4cx, 5cx... экскаваторов jcb 3cx, 4cx, 5cx...</p>
-                    </div>
-                    <div class="folders_list-card__date">20 авг.</div>
-                </div>
+                
             </div>
             `;
 
             // document.querySelector(".folder_observe__folders_list")
 
-            fetch(`https://ai-meneger-edward0076.amvera.io/projects/${projectData.id}/chats`)
+            await fetch(`https://ai-meneger-edward0076.amvera.io/projects/${projectData.id}/chats`)
                 .then(chatsData => {
                     return chatsData.json()
                 })
                 .then(chatsData => {
 
                     chatsData.forEach(chat => {
-                        console.log(chat.created_at.slice(0, 10), chat.title, );
-                    });
+                        console.log(chat.created_at.slice(0, 10), chat.title);
 
-                    fetch(`https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/${chat.id}`)
-                    .then(res => res.json())
-                    .then(chatObject => {
-                        console.log(chatObject);
+                        let chatData = chat.created_at.slice(0, 10);
+                        let chatTitle = chat.title;
+                        let chatId = chat.id;
+                        let chatLastMessage;
+
+                        fetch(`https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/${chat.id}`)
+                            .then(res => res.json())
+                            .then(chatObject => {
+
+                                chatLastMessage = chatObject[0].content;
+
+                            });
+
+                        document.querySelector(".folder_observe__folders_list").innerHTML +=
+                            `
+                        <div class="folder_observe__folders_list-card" data-chat-id="${chatId}">
+                            <div class="folders_list-card__content">
+                                <h2>${chatTitle}</h2>
+                                <p>${chatLastMessage}</p>
+                            </div>
+                            <div class="folders_list-card__date">${chatData}</div>
+                        </div>
+                        `;
+
                     });
                 });
 
-        });
+            document.querySelectorAll(".folder_observe__folders_list-card").forEach(card => {
+                card.onclick = () => {
+                    let cardChatID = card.dataset.chatId;
 
+                    openChat(cardChatID);
+                };
+            });
+
+            
+
+        });
 }
+
+// function newChatInProject(projectId, formData) {
+
+//     let messageText = document.querySelector("#project_message_input").value;
+//     document.querySelector("#project_message_input").value = '';
+
+
+
+// }

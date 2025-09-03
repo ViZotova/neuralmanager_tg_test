@@ -76,6 +76,8 @@ document.querySelector("#desktop_search_btn").onclick = async () => {
             .then(res => res.json())
             .then(res => {
 
+                console.log("распредели: ", res);
+
                 let typingMarker = chatRoll.lastChild.previousElementSibling;
                 chatRoll.removeChild(typingMarker);
 
