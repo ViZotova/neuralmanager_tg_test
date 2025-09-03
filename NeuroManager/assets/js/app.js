@@ -8,7 +8,7 @@ menuButton.addEventListener('click', () => {
             const webApp = window.Telegram.WebApp;
 
             // Получаем объект user
-            const user = webApp.initDataUnsafe?.user;
+            const user = webApp.initDataUnsafe.user;
 
             if (user) {
                 const telegramId = user.id;
