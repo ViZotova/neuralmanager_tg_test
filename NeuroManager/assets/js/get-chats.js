@@ -134,6 +134,8 @@ d="M4.24219 0C5.00989 -1.30247e-06 5.61349 -0.0140535 6.15137 0.236328C6.74108 0
                     document.querySelector(".sidebar").classList.add("__closed");
                     document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
 
+                    openProject(folderID);
+
                 };
 
 
@@ -168,6 +170,8 @@ function openChat(chat_id) {
     document.querySelector(".sidebar").classList.add("__closed");
     document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
 
+    document.querySelector(".__tab_opened").classList.remove("__tab_opened");
+    document.querySelector(".window__chat-content").classList.add("__tab_opened");
     document.querySelector(".window__chat-content").innerHTML = "";
 
     fetch(`https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/${chat_id}`)
