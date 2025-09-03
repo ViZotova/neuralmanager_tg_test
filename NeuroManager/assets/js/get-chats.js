@@ -171,7 +171,7 @@ function openChat(chat_id) {
     document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
 
     document.querySelector(".__tab_opened").classList.remove("__tab_opened");
-    document.querySelector(".window__chat-content").classList.add("__tab_opened");
+    document.querySelector(".window__chat-container").classList.add("__tab_opened");
     document.querySelector(".window__chat-content").innerHTML = "";
 
     fetch(`https://ai-meneger-edward0076.amvera.io/chat_gpt/messages/${chat_id}`)
