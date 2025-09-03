@@ -13,7 +13,7 @@ window.onload = async () => {
 
     let allProjects = [];
 
-    await fetch("https://ai-meneger-edward0076.amvera.io/projects")
+    await fetch(`https://ai-meneger-edward0076.amvera.io/projects/by_tg/${app_tg_id}`)
         .then(projectsList => {
             return projectsList.json();
         })
@@ -46,7 +46,7 @@ window.onload = async () => {
                 allProjects.push(currentProjectBlank);
             });
 
-            allProjects.forEach(projectData => {
+            allProjects.forEach(async (projectData) => {
 
                 document.querySelector(".sidebar__catalog-chats").innerHTML +=
                     `
@@ -78,16 +78,9 @@ d="M4.24219 0C5.00989 -1.30247e-06 5.61349 -0.0140535 6.15137 0.236328C6.74108 0
             </div>
         `;
 
-                let currentFolder = document.querySelector(`.catalog-folder__header[data-folder-order="${projectData.id}"]`);
-
-                currentFolder.onclick = (event) => {
-                    let folderID = currentFolder.dataset.folderOrder;
-                    document.querySelector(`.sidebar__catalog-folder[data-folder-order='${folderID}'`).classList.toggle("__expanded");
-                };
-
                 let currentInner = document.querySelector(`.sidebar__catalog-folder[data-folder-order="${projectData.id}"] .catalog-folder__inner`);
 
-                fetch(`https://ai-meneger-edward0076.amvera.io/projects/${projectData.id}/chats`)
+                await fetch(`https://ai-meneger-edward0076.amvera.io/projects/${projectData.id}/chats`)
                     .then(chatsData => {
                         return chatsData.json()
                     })
@@ -107,42 +100,73 @@ d="M4.24219 0C5.00989 -1.30247e-06 5.61349 -0.0140535 6.15137 0.236328C6.74108 0
                             </div>
                             `
                         });
+                    });
 
-                        document.querySelectorAll(".folder-inner__link")
-
-                        document.querySelectorAll(".folder-inner__link").forEach(link => {
-
-                            console.log(link);
-
-                            link.onclick = () => {
-
-                                // Clear input
-                                document.querySelector(".chat-search__input .search__input-field").value = "";
-                                document.querySelector(".__mobile__chat-search__input .search__input-field").value = "";
-
-                                // Open Chat Window
-                                document.querySelector(".__tab_opened").classList.remove("__tab_opened");
-                                document.querySelector(".window__chat-container").classList.add("__tab_opened");
-
-                                // Close sidebar
-                                document.querySelector(".sidebar").classList.add("__closed");
-                                document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
-
-                                currentChatId = Number(link.dataset.chatId);
-                                openChat(link.dataset.chatId);
+                await fetch(`https://ai-meneger-edward0076.amvera.io/chat_gpt/chats/${app_tg_id}`)
+                    .then(chatsList => {
+                        return chatsList.json();
+                    })
+                    .then(chatsList => {
+                        console.log(chatsList);
+                        chatsList.forEach(chat => {
+                            if (chat.project_id === null) {
+                                document.querySelector(".sidebar__catalog-chats").innerHTML +=
+                                    `
+                    <div class="sidebar__catalog-link user-chats-link" onclick="openChat(${chat.id})" data-chat-id="${chat.id}">
+                        <div class="catalog-link__name">
+                            ${chat.title}
+                        </div>
+                    </div>
+                    `;
                             }
                         });
                     });
 
+                let currentFolder = document.querySelector(`.catalog-folder__header[data-folder-order="${projectData.id}"]`);
+
+                currentFolder.onclick = (event) => {
+                    let folderID = currentFolder.dataset.folderOrder;
+                    // document.querySelector(`.sidebar__catalog-folder[data-folder-order='${folderID}'`).classList.toggle("__expanded");
+
+                    document.querySelector(".__tab_opened").classList.remove("__tab_opened");
+                    document.querySelector(".window__folder_observe").classList.add("__tab_opened");
+
+                    document.querySelector(".sidebar").classList.add("__closed");
+                    document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
+
+                };
+
+
+                // document.querySelectorAll(".folder-inner__link").forEach(link => {
+
+                //     link.onclick = () => {
+
+                //         // Clear input
+                //         document.querySelector(".chat-search__input .search__input-field").value = "";
+                //         document.querySelector(".__mobile__chat-search__input .search__input-field").value = "";
+
+                //         // Open Chat Window
+                //         document.querySelector(".__tab_opened").classList.remove("__tab_opened");
+                //         document.querySelector(".window__chat-container").classList.add("__tab_opened");
+
+                //         // Close sidebar
+                //         document.querySelector(".sidebar").classList.add("__closed");
+                //         document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
+
+                //         currentChatId = Number(link.dataset.chatId);
+                //         openChat(link.dataset.chatId);
+                //     }
+                // });
+
             });
 
         });
-
 }
 
 function openChat(chat_id) {
 
-    console.log(chat_id)
+    document.querySelector(".sidebar").classList.add("__closed");
+    document.querySelector(".sidebar__back_overlay").classList.remove("__opened");
 
     document.querySelector(".window__chat-content").innerHTML = "";
 
@@ -183,15 +207,13 @@ function renderChat(chats_data) {
             else {
                 chatRoll.innerHTML +=
                     `
-                            <div class="user_message">
-                                <div class="user_message__card">
-                                    <div class="user_message__text">${chat_data.content}</div>
-                                </div>
-                            </div>
-                            `;
+                    <div class="user_message">
+                        <div class="user_message__card">
+                            <div class="user_message__text">${chat_data.content}</div>
+                        </div>
+                    </div>
+                    `;
             }
-
-
         }
         else {
 
