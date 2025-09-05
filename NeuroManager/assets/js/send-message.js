@@ -1,321 +1,254 @@
-
 let chatRoll = document.querySelector(".window__chat-content");
 
-document.querySelector("#desktop_search_btn").onclick = async () => {
+async function sendMessage(messageText) {
+    if (!messageText.trim()) return;
 
-    let messageText = document.querySelector("#desktop_search_input").value;
-    document.querySelector("#desktop_search_input").value = '';
+    const fileInput = document.querySelector(".chat-search__input input[type='file']");
+    const formData = new FormData();
 
+    formData.append('tg_id', app_tg_id);
+    formData.append('prompt', messageText);
+    if (currentChatId >= 0) formData.append('chat_id', currentChatId);
+    if (fileInput.files[0]) formData.append('file', fileInput.files[0]);
 
-    if (messageText.trim() !== "") {
-
-        const fileInput = document.querySelector(".chat-search__input input[type='file']");
-        // console.log(fileInput);
-        const formData = new FormData();
-
-        formData.append('tg_id', app_tg_id);
-        formData.append('prompt', String(messageText));
-
-        if (currentChatId >= 0) {
-            formData.append('chat_id', currentChatId);
-        }
-
-        if (fileInput.files[0]) {
-            chatRoll.innerHTML +=
-            `<div class="user_message">
-                <div class="user_message__file">
-                    <div class="user_message__file-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M304 112L192 112C183.2 112 176 119.2 176 128L176 512C176 520.8 183.2 528 192 528L448 528C456.8 528 464 520.8 464 512L464 272L376 272C336.2 272 304 239.8 304 200L304 112zM444.1 224L352 131.9L352 200C352 213.3 362.7 224 376 224L444.1 224zM128 128C128 92.7 156.7 64 192 64L325.5 64C342.5 64 358.8 70.7 370.8 82.7L493.3 205.3C505.3 217.3 512 233.6 512 250.6L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 128z"/></svg>
-                    </div>
-                    <div class="user_message__file-data">
-                        <h3>${fileInput.files[0].name}</h3>
-                        <p>Файл</p>
-                    </div>
+    // Сообщение пользователя
+    if (fileInput.files[0]) {
+        chatRoll.innerHTML += `
+        <div class="user_message">
+            <div class="user_message__file">
+                <div class="user_message__file-icon">...</div>
+                <div class="user_message__file-data">
+                    <h3>${fileInput.files[0].name}</h3>
+                    <p>Файл</p>
                 </div>
-                <div class="user_message__card">
-                    <div class="user_message__text">${messageText}</div>
-                </div>
-            </div>`;
-        }
-        else {
-            chatRoll.innerHTML +=
-            `<div class="user_message">
-                <div class="user_message__card">
-                    <div class="user_message__text">${messageText}</div>
-                </div>
-            </div>`;
-        }
+            </div>
+            <div class="user_message__card">
+                <div class="user_message__text">${messageText}</div>
+            </div>
+        </div>`;
+    } else {
+        chatRoll.innerHTML += `
+        <div class="user_message">
+            <div class="user_message__card">
+                <div class="user_message__text">${messageText}</div>
+            </div>
+        </div>`;
+    }
 
+    chatRoll.innerHTML += `<div class="gpt_typing_marker">Печатает...</div>`;
 
-        let mess = '';
-
-        chatRoll.innerHTML +=
-            `
-        <div class="gpt_typing_marker">
-            Печатает...
-        </div>
-        `;
-
-        // Добавляем опциональные поля, если они заполнены
-        // if (chat_id) formData.append('chat_id', 1);
-        // if (project_id) formData.append('project_id', project_id);
-
-        // Добавляем файл, если выбран
-        if (fileInput.files[0]) {
-            formData.append('file', fileInput.files[0]);
-            // console.log(fileInput.files[0]);
-
-            fileInput.value = "";
-        }
-
-        // Отправляем запрос
-        await fetch('https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all', {
+    let res;
+    try {
+        const response = await fetch('https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all', {
             method: 'POST',
             body: formData
-        })
-            .then(res => res.json())
-            .then(res => {
+        });
+        res = await response.json();
+    } catch (e) {
+        console.error("Ошибка запроса:", e);
+        return;
+    }
 
-                console.log("распредели: ", res);
+    const typingMarker = chatRoll.querySelector(".gpt_typing_marker");
+    if (typingMarker) typingMarker.remove();
 
-                let typingMarker = chatRoll.lastChild.previousElementSibling;
-                chatRoll.removeChild(typingMarker);
+    let isTaskCommand = messageText.toUpperCase().startsWith("РАСПРЕДЕЛИ ЗАДАЧИ");
 
-                if (res.message.chat_id) {
-                    currentChatId = res.message.chat_id;
+    // --- Если пришёл массив ---
+    if (Array.isArray(res) || isTaskCommand) {
+        let tasks = Array.isArray(res) ? res : [{
+            title: res.message || "Задача на создание",
+            description: res.message || "",
+            deadline_date: new Date().toISOString().split("T")[0],
+            executor_id: 1
+        }];
+
+        // ---  функция для получения пользователей  ---
+        let users = [];
+        async function fetchUsersOnce() {
+            if (users.length) return; // уже загружены
+            try {
+                const r = await fetch('https://ai-meneger-edward0076.amvera.io/users/', {
+                    method: 'GET',
+                    headers: { 'accept': 'application/json' }
+                });
+                users = await r.json();
+            } catch (e) {
+                console.error("Ошибка получения пользователей:", e);
+                users = [];
+            }
+        }
+
+        // --- helpers ---
+        function normalizeField(field) {
+            if (field == null) return '';
+            if (typeof field === 'string') return field;
+            if (typeof field === 'object') {
+                if (typeof field.title === 'string') return field.title;
+                if (typeof field.message === 'string') return field.message;
+                for (const k of Object.keys(field)) {
+                    if (typeof field[k] === 'string') return field[k];
                 }
+                return JSON.stringify(field, null, 2);
+            }
+            return String(field);
+        }
 
-                if (res.message.message) {
-                    mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-                }
-                else {
-                    mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-                }
-            });
+        function cleanMarkdown(text) {
+            return text
+                .replace(/^#{1,6}\s*/gm, '')   // заголовки
+                .replace(/[-*]\s+/gm, '')      // буллиты
+                .replace(/\|/g, '')            // таблицы
+                .replace(/\n{2,}/g, '\n')      // переносы
+                .trim();
+        }
 
-        // await fetch("https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
+        function extractTitleAndDescription(rawTitle, rawDescription) {
+            let baseText = normalizeField(rawTitle) || normalizeField(rawDescription);
+            if (!baseText) return { title: "Задача на создание", description: "" };
 
-        //     body: JSON.stringify({
-        //         chat_id: currentChatId,
-        //         prompt: String(messageText),
-        //         tg_id: 5254325840
-        //     })
-        // })
+            const lines = baseText.split("\n");
+            let firstLine = cleanMarkdown(lines[0]).trim();
+            if (!firstLine) firstLine = "Задача на создание";
 
-        let sentences = mess.split("\n");
+            let rest = cleanMarkdown(lines.slice(1).join("\n"));
+            return { title: firstLine, description: rest };
+        }
 
-        let gptMessage = ``;
+        await fetchUsersOnce();
 
-        sentences.forEach(sentence => {
-            let title_order = 0;
+        let mess = '';
+        tasks.forEach(task => {
+            const { title: taskTitle, description: taskDescription } =
+                extractTitleAndDescription(task.title, task.description);
 
-            for (let i = 0; i < sentence.length; i++) {
-                if (sentence[i] === "#") {
-                    title_order++;
-                }
-                else {
-                    break;
-                }
+            // для селекта пользователей
+            let userOptions = '';
+            if (Array.isArray(users) && users.length) {
+                userOptions = users.map(u => {
+                    const selected = (task.executor_id && Number(task.executor_id) === Number(u.id)) ? 'selected' : '';
+                    const label = `${u.name}${u.department ? ` (${u.department})` : ''}`;
+                    return `<option value="${u.id}" ${selected}>${escapeHtml(label)}</option>`;
+                }).join('');
+            } else {
+                userOptions = `<option value="1">Исполнитель 1</option>`;
             }
 
-            // Cutting # markers in beginning
-            sentence = sentence.slice((title_order == 0) ? 0 : title_order + 1);
+            const titleForOnclick = taskTitle.replace(/'/g, "\\'");
+            const dateVal = (task.deadline_date && /^\d{4}-\d{2}-\d{2}$/.test(task.deadline_date))
+                ? task.deadline_date
+                : new Date().toISOString().split('T')[0];
 
-            let tag = "";
-            if (title_order === 0) {
-                tag = "p";
-            }
-            else {
-                tag = "h" + title_order;
-            }
+            mess += `
+<div class="task_card" style="font-size:16px; line-height:1.5; margin-bottom:12px;">
+    <div><b>Наименование:</b> ${escapeHtml(taskTitle)}</div>
+    <div><b>Описание:</b></div>
+    <div style="white-space:pre-wrap; margin:6px 0;">${escapeHtml(taskDescription)}</div>
+    <div><b>Сроки выполнения:</b> <input type="date" value="${dateVal}"></div>
+    <div><b>Исполнитель:</b> 
+        <select>
+            ${userOptions}
+        </select>
+    </div>
+    <div><b>Файл:</b> 
+    <input type="file" class="task_file" style="display:none" onchange="showFileName(this)">
+    <button type="button" onclick="triggerFileSelect(this)">Добавить файл</button>
+    <span class="file-info" style="margin-left:10px; font-size:14px; color:#333;"></span>
+</div>
 
-            gptMessage +=
-                `
-            <${tag}>
-                ${(sentence.trim() !== "") ? sentence.trim() : "<span class='msg_whitespace'></span>"}
-            </${tag}>
-            `;
-
+    <div style="margin-top:8px;"><button onclick="createTask('${titleForOnclick}')">Создать</button></div>
+</div>`;
         });
 
-        chatRoll.innerHTML +=
-            `
-        <div class="gpt_message">
-            <div class="gpt_message__card">
-                ${gptMessage}
+        chatRoll.innerHTML += `<div class="gpt_message"><div class="gpt_message__card">${mess}</div></div>`;
 
-                <div class="gpt_message__footer">
+        function escapeHtml(str) {
+            if (str == null) return '';
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        document.querySelector("#tasksContainer").innerHTML = mess;
+        document.querySelector("#tasksModal").style.display = "flex";
+        return;
+    }
+    
+
+    // --- Markdown / текст ---
+    let mess = (res.message && res.message.message) ? res.message.message : res.message || "";
+    mess = mess.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>'); 
+
+    let sentences = mess.split("\n");
+    let gptMessage = '';
+
+    sentences.forEach(sentence => {
+        let title_order = 0;
+        for (let i = 0; i < sentence.length; i++) {
+            if (sentence[i] === "#") title_order++;
+            else break;
+        }
+
+        sentence = sentence.slice(title_order > 0 ? title_order + 1 : 0);
+        let tag = title_order === 0 ? 'p' : 'h' + title_order;
+
+        gptMessage += `<${tag}>${sentence.trim() !== "" ? sentence.trim() : "<span class='msg_whitespace'></span>"}</${tag}>`;
+    });
+
+    chatRoll.innerHTML += `
+    <div class="gpt_message">
+        <div class="gpt_message__card">
+            ${gptMessage}
+            <div class="gpt_message__footer">
                 <div class="gpt_message__footer-btn">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M5.8999 10.1C5.8999 8.12039 5.8999 7.12989 6.5152 6.51529C7.1298 5.89999 8.1203 5.89999 10.0999 5.89999H10.7999C12.7795 5.89999 13.77 5.89999 14.3846 6.51529C14.9999 7.12989 14.9999 8.12039 14.9999 10.1V10.8C14.9999 12.7796 14.9999 13.7701 14.3846 14.3847C13.77 15 12.7795 15 10.7999 15H10.0999C8.1203 15 7.1298 15 6.5152 14.3847C5.8999 13.7701 5.8999 12.7796 5.8999 10.8V10.1Z"
-                            stroke="#8E8E93" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path
-                            d="M11.5 5.9C11.4979 3.8301 11.4671 2.7577 10.8644 2.0234C10.7481 1.88175 10.6182 1.75186 10.4766 1.6356C9.701 1 8.5516 1 6.25 1C3.9491 1 2.7983 1 2.0234 1.6356C1.88175 1.75186 1.75186 1.88175 1.6356 2.0234C1 2.799 1 3.9484 1 6.25C1 8.5509 1 9.7017 1.6356 10.4766C1.75186 10.6182 1.88175 10.7481 2.0234 10.8644C2.7584 11.4664 3.8294 11.4986 5.9 11.5"
-                            stroke="#8E8E93" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M5.8999 10.1C5.8999 8.12039 5.8999 7.12989 6.5152 6.51529C7.1298 5.89999 8.1203 5.89999 10.0999 5.89999H10.7999C12.7795 5.89999 13.77 5.89999 14.3846 6.51529C14.9999 7.12989 14.9999 8.12039 14.9999 10.1V10.8C14.9999 12.7796 14.9999 13.7701 14.3846 14.3847C13.77 15 12.7795 15 10.7999 15H10.0999C8.1203 15 7.1298 15 6.5152 14.3847C5.8999 13.7701 5.8999 12.7796 5.8999 10.8V10.1Z" stroke="#8E8E93" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M11.5 5.9C11.4979 3.8301 11.4671 2.7577 10.8644 2.0234C10.7481 1.88175 10.6182 1.75186 10.4766 1.6356C9.701 1 8.5516 1 6.25 1C3.9491 1 2.7983 1 2.0234 1.6356C1.88175 1.75186 1.75186 1.88175 1.6356 2.0234C1 2.799 1 3.9484 1 6.25C1 8.5509 1 9.7017 1.6356 10.4766C1.75186 10.6182 1.88175 10.7481 2.0234 10.8644C2.7584 11.4664 3.8294 11.4986 5.9 11.5" stroke="#8E8E93" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
             </div>
-
-            </div>
         </div>
-        `;
+    </div>`;
 
+    if (res.chat_id) currentChatId = res.chat_id;
+}
+
+function triggerFileSelect(btn) {
+    const fileInput = btn.parentElement.querySelector(".task_file");
+    if (fileInput) {
+        fileInput.click(); 
     }
+}
+
+function showFileName(input) {
+    const info = input.parentElement.querySelector(".file-info");
+    if (input.files && input.files[0]) {
+        info.textContent = `Добавлен файл: ${input.files[0].name}`;
+    } else {
+        info.textContent = '';
+    }
+}
+
+function closeTasksModal() {
+    document.querySelector("#tasksModal").style.display = "none";
+}
+
+
+function createTask(title) {
+    alert(`Задача "${title}" создана!`);
+}
+
+document.querySelector("#desktop_search_btn").onclick = () => {
+    const messageText = document.querySelector("#desktop_search_input").value;
+    document.querySelector("#desktop_search_input").value = '';
+    sendMessage(messageText);
 };
 
-// For mobile
-
-document.querySelector("#mobile_search_btn").onclick = async () => {
-
-    let messageText = document.querySelector("#mobile_search_input").value;
+document.querySelector("#mobile_search_btn").onclick = () => {
+    const messageText = document.querySelector("#mobile_search_input").value;
     document.querySelector("#mobile_search_input").value = '';
-
-    if (messageText.trim() !== "") {
-
-        const fileInput = document.querySelector(".__mobile__chat-search__input input[type='file']");
-        // console.log(fileInput)
-        const formData = new FormData();
-
-        formData.append('tg_id', app_tg_id);
-        formData.append('prompt', String(messageText));
-
-        if (currentChatId >= 0) {
-            formData.append('chat_id', currentChatId);
-        }
-        
-        if (fileInput.files[0]) {
-            chatRoll.innerHTML +=
-            `<div class="user_message">
-                <div class="user_message__file">
-                    <div class="user_message__file-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M304 112L192 112C183.2 112 176 119.2 176 128L176 512C176 520.8 183.2 528 192 528L448 528C456.8 528 464 520.8 464 512L464 272L376 272C336.2 272 304 239.8 304 200L304 112zM444.1 224L352 131.9L352 200C352 213.3 362.7 224 376 224L444.1 224zM128 128C128 92.7 156.7 64 192 64L325.5 64C342.5 64 358.8 70.7 370.8 82.7L493.3 205.3C505.3 217.3 512 233.6 512 250.6L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 128z"/></svg>
-                    </div>
-                    <div class="user_message__file-data">
-                        <h3>${fileInput.files[0].name}</h3>
-                        <p>Файл</p>
-                    </div>
-                </div>
-                <div class="user_message__card">
-                    <div class="user_message__text">${messageText}</div>
-                </div>
-            </div>`;
-        }
-        else {
-            chatRoll.innerHTML +=
-            `<div class="user_message">
-                <div class="user_message__card">
-                    <div class="user_message__text">${messageText}</div>
-                </div>
-            </div>`;
-        }
-
-        let mess = '';
-
-        chatRoll.innerHTML +=
-            `
-        <div class="gpt_typing_marker">
-            Печатает...
-        </div>
-        `;
-
-        // Добавляем опциональные поля, если они заполнены
-        // if (chat_id) formData.append('chat_id', 1);
-        // if (project_id) formData.append('project_id', project_id);
-
-        // Добавляем файл, если выбран
-        if (fileInput.files[0]) {
-            formData.append('file', fileInput.files[0]);
-            // console.log(fileInput.files[0]);
-
-            fileInput.value = "";
-        }
-
-        // Отправляем запрос
-        await fetch('https://ai-meneger-edward0076.amvera.io/chat_gpt/message_all', {
-            method: 'POST',
-            body: formData
-        })
-            .then(res => res.json())
-            .then(res => {
-
-                let typingMarker = chatRoll.lastChild.previousElementSibling;
-                chatRoll.removeChild(typingMarker);
-
-                if (res.message.chat_id) {
-                    currentChatId = res.message.chat_id;
-                }
-                
-                if (res.message.message) {
-                    mess = res.message.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-                }
-                else {
-                    mess = res.message.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-                }
-            });
-
-        let sentences = mess.split("\n");
-
-        let gptMessage = ``;
-
-        sentences.forEach(sentence => {
-            let title_order = 0;
-
-            for (let i = 0; i < sentence.length; i++) {
-                if (sentence[i] === "#") {
-                    title_order++;
-                }
-                else {
-                    break;
-                }
-            }
-
-            // Cutting # markers in beginning
-            sentence = sentence.slice((title_order == 0) ? 0 : title_order + 1);
-
-            let tag = "";
-            if (title_order === 0) {
-                tag = "p";
-            }
-            else {
-                tag = "h" + title_order;
-            }
-
-            gptMessage +=
-                `
-            <${tag}>
-                ${(sentence.trim() !== "") ? sentence.trim() : "<span class='msg_whitespace'></span>"}
-            </${tag}>
-            `;
-
-        });
-
-        chatRoll.innerHTML +=
-            `
-        <div class="gpt_message">
-            <div class="gpt_message__card">
-                ${gptMessage}
-
-                <div class="gpt_message__footer">
-                <div class="gpt_message__footer-btn">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M5.8999 10.1C5.8999 8.12039 5.8999 7.12989 6.5152 6.51529C7.1298 5.89999 8.1203 5.89999 10.0999 5.89999H10.7999C12.7795 5.89999 13.77 5.89999 14.3846 6.51529C14.9999 7.12989 14.9999 8.12039 14.9999 10.1V10.8C14.9999 12.7796 14.9999 13.7701 14.3846 14.3847C13.77 15 12.7795 15 10.7999 15H10.0999C8.1203 15 7.1298 15 6.5152 14.3847C5.8999 13.7701 5.8999 12.7796 5.8999 10.8V10.1Z"
-                            stroke="#8E8E93" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                        <path
-                            d="M11.5 5.9C11.4979 3.8301 11.4671 2.7577 10.8644 2.0234C10.7481 1.88175 10.6182 1.75186 10.4766 1.6356C9.701 1 8.5516 1 6.25 1C3.9491 1 2.7983 1 2.0234 1.6356C1.88175 1.75186 1.75186 1.88175 1.6356 2.0234C1 2.799 1 3.9484 1 6.25C1 8.5509 1 9.7017 1.6356 10.4766C1.75186 10.6182 1.88175 10.7481 2.0234 10.8644C2.7584 11.4664 3.8294 11.4986 5.9 11.5"
-                            stroke="#8E8E93" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-            </div>
-
-            </div>
-        </div>
-        `;
-
-    }
+    sendMessage(messageText);
 };

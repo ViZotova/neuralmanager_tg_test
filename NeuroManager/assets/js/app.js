@@ -1,32 +1,57 @@
+// =======ПРОД=======
+
+// Селектор кнопки меню
 const menuButton = document.querySelector(".window__header-sidebar_button");
 
-menuButton.addEventListener('click', () => {
-    try {
-        let userId;
-        // Проверяем, доступен ли API
-        if (window.Telegram && window.Telegram.WebApp) {
-            const webApp = window.Telegram.WebApp;
+// Функция для получения Telegram ID
+function getTelegramId() {
+  let telegramId = null;
 
-            // Получаем объект user
-            const user = webApp.initDataUnsafe.user;
+  try {
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.disableVerticalSwipes();
 
-            if (user) {
-                const telegramId = user.id;
-                alert("Telegram ID:", telegramId);
-                // Отправьте telegramId на свой сервер для обработки
-            } else {
-                alert("Данные пользователя недоступны.");
-            }
-        } else {
-            alert("Telegram WebApp API недоступен.");
-        }
+      telegramId = tg.initDataUnsafe?.user?.id;
+      if (telegramId) {
+        localStorage.setItem("userId", telegramId);
+        console.log("Telegram ID получен из WebApp:", telegramId);
+      } else {
+        console.warn("Telegram ID недоступен в initDataUnsafe.");
+      }
+    } else {
+      console.warn("Telegram WebApp API недоступен.");
     }
-    catch (e) {
-        alert(e);
-    }
-    alert(userId);
+  } catch (e) {
+    console.error("Ошибка при получении Telegram ID:", e);
+  }
+
+  // Резервное получение из localStorage
+  if (!telegramId) {
+    telegramId = localStorage.getItem("userId");
+    if (telegramId)
+      console.log("Telegram ID получен из localStorage:", telegramId);
+  }
+
+  // Обновляем UI и глобальную переменную
+  if (telegramId) {
+    const el = document.getElementById("telegram_id_display");
+    if (el) el.textContent = telegramId;
+    window.app_tg_id = telegramId;
+  } else {
+    console.error("Не удалось получить Telegram ID.");
+  }
+
+  return telegramId;
+}
+
+// Вешаем на кнопку меню
+menuButton.addEventListener("click", () => {
+  getTelegramId();
 });
 
+// Глобальные переменные
 let currentChatId = -1;
-let app_tg_id = 5254325840;
 let project_id = null;

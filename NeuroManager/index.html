@@ -50,13 +50,13 @@
                                     <div class="option-item selected">
                                         Константин Константинопольский (ПТО)
                                     </div>
-                                    <div class="option-item">
+                                    <div class="option-item" data-id="1">
                                         Иван Иванов (ОТК)
                                     </div>
-                                    <div class="option-item">
+                                    <div class="option-item" data-id="2">
                                         Петр Петров (ПТО)
                                     </div>
-                                    <div class="option-item">
+                                    <div class="option-item" data-id="3">
                                         Мария Сидорова (ОТК)
                                     </div>
                                 </div>
@@ -155,7 +155,7 @@
                         <div class="select-container" data-select-id="3">
                             <div class="select-header">
                                 <span class="select-label">Статус</span>
-                                <div class="selected-value">В работе</div>
+                                <div class="selected-value">В процессе</div>
                                 <span class="dropdown-arrow">
                                     <svg width="13" height="7" viewBox="0 0 13 7" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -174,16 +174,16 @@
 
                                 <div class="options-list">
                                     <div class="option-item selected">
-                                        В работе
+                                        Начал
                                     </div>
                                     <div class="option-item">
-                                        Иван Иванов (ОТК)
+                                        В процессе
                                     </div>
                                     <div class="option-item">
-                                        Петр Петров (ПТО)
+                                        На проверке
                                     </div>
                                     <div class="option-item">
-                                        Мария Сидорова (ОТК)
+                                        Готово
                                     </div>
                                 </div>
                             </div>
@@ -557,7 +557,7 @@
                 <!-- Observe folder -->
 
                 <div class="window__folder_observe __tab" data-tab-id="2">
-                    
+
                 </div>
 
                 <!-- Tokens info -->
@@ -669,6 +669,12 @@
                                         stroke="black" stroke-width="1.6" stroke-linecap="round"
                                         stroke-linejoin="round" />
                                 </svg>
+                                <!-- Поисковое поле (скрыто по умолчанию) -->
+                                <div class="tasks_list-header__search-field" style="display: none; margin-top: 8px;">
+                                    <input type="text" id="taskSearchInput" placeholder="Поиск задач..."
+                                        style="width: 100%; padding: 6px 10px; font-size: 1rem;">
+                                </div>
+
                             </div>
 
                             <div class="tasks_list-header__actions-filters">
@@ -731,8 +737,10 @@
                             </div>
                             <div class="window__check-user_info__char">
                                 <h3>Имя пользователя</h3>
-                                <p>@konstantinopolsky</p>
+                                <p id="telegram_id_display">Загрузка...</p>
+
                             </div>
+
                             <div class="window__check-user_info__char">
                                 <h3>Дедлайн</h3>
                                 <p>28 сентября 2025</p>
@@ -945,6 +953,15 @@
         </div>
     </div>
 
+    <div id="tasksModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeTasksModal()">&times;</span>
+    <h2>Список задач</h2>
+    <div id="tasksContainer"></div>
+  </div>
+</div>
+
+    <script src="assets/js/get_tg_id.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="assets/js/get-tasks.js"></script>
     <script src="assets/js/tokens-data.js"></script>
