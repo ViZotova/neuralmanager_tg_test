@@ -19,6 +19,8 @@ async function initTgId() {
     try {
         const tg = window.Telegram?.WebApp;
         tg?.ready();
+        tg?.expand();
+        tg?.disableVerticalSwipes();
 
         const user = tg?.initDataUnsafe?.user;
         if (!user) {
@@ -26,18 +28,22 @@ async function initTgId() {
             return;
         }
 
-        const currentUsername = `@${user.username}`;
-        console.log("Зашёл пользователь:", currentUsername);
+        const telegramId = user.id || user?.tg_id; // берём ID пользователя из WebApp
+        console.log("Зашёл пользователь с TG ID:", telegramId);
+
+        // сохраняем в localStorage
+        if (telegramId) localStorage.setItem("userId", telegramId);
 
         const users = await fetchUsers();
-        const currentUser = users.find(u => u.username === currentUsername);
+        // ищем пользователя по tg_id
+        const currentUser = users.find(u => u.tg_id == telegramId);
 
         if (currentUser) {
             window.app_tg_id = currentUser.tg_id;
             displayTgId(window.app_tg_id);
-            console.log("TG ID найден:", window.app_tg_id);
+            console.log("TG ID найден:", window.app_tg_id, "Пользователь:", currentUser.name);
         } else {
-            console.warn(`Пользователь ${currentUsername} не найден в базе`);
+            console.warn(`Пользователь с TG ID ${telegramId} не найден в базе`);
         }
     } catch (err) {
         console.error("Ошибка в initTgId:", err);
@@ -45,4 +51,5 @@ async function initTgId() {
 }
 
 initTgId();
+
 
