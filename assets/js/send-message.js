@@ -1,4 +1,15 @@
+function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
 let chatRoll = document.querySelector(".window__chat-content");
+if (!chatRoll) chatRoll = document.body;
 
 async function sendMessage(messageText) {
     if (!messageText.trim()) return;
@@ -140,7 +151,7 @@ async function sendMessage(messageText) {
                 : new Date().toISOString().split('T')[0];
 
             mess += `
-<div class="task_card" style="font-size:16px; line-height:1.5; margin-bottom:12px;">
+    <div class="task_card" data-title="${escapeHtml(taskTitle)}" style="font-size:16px; line-height:1.5; margin-bottom:12px;">
     <div><b>Наименование:</b> ${escapeHtml(taskTitle)}</div>
     <div><b>Описание:</b></div>
     <div style="white-space:pre-wrap; margin:6px 0;">${escapeHtml(taskDescription)}</div>
@@ -156,31 +167,21 @@ async function sendMessage(messageText) {
     <span class="file-info" style="margin-left:10px; font-size:14px; color:#333;"></span>
 </div>
 
-    <div style="margin-top:8px;"><button onclick="createTask('${titleForOnclick}')">Создать</button></div>
+    <div style="margin-top:8px;"><button onclick="createTaskWithFile('${titleForOnclick}')">Создать</button></div>
 </div>`;
         });
 
-        chatRoll.innerHTML += `<div class="gpt_message"><div class="gpt_message__card">${mess}</div></div>`;
-
-        function escapeHtml(str) {
-            if (str == null) return '';
-            return String(str)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#39;");
-        }
+        // chatRoll.innerHTML += `<div class="gpt_message"><div class="gpt_message__card">${mess}</div></div>`;
 
         document.querySelector("#tasksContainer").innerHTML = mess;
         document.querySelector("#tasksModal").style.display = "flex";
         return;
     }
-    
+
 
     // --- Markdown / текст ---
     let mess = (res.message && res.message.message) ? res.message.message : res.message || "";
-    mess = mess.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>'); 
+    mess = mess.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
 
     let sentences = mess.split("\n");
     let gptMessage = '';
@@ -219,7 +220,7 @@ async function sendMessage(messageText) {
 function triggerFileSelect(btn) {
     const fileInput = btn.parentElement.querySelector(".task_file");
     if (fileInput) {
-        fileInput.click(); 
+        fileInput.click();
     }
 }
 
@@ -234,12 +235,84 @@ function showFileName(input) {
 
 function closeTasksModal() {
     document.querySelector("#tasksModal").style.display = "none";
+    document.querySelector("#tasksContainer").innerHTML = ""; // очищаем форму
 }
 
+async function createTaskWithFile(title) {
+    try {
+        const taskCard = document.querySelector(`.task_card[data-title="${title}"]`);
+        if (!taskCard) throw new Error("Не найдена форма задачи");
 
-function createTask(title) {
-    alert(`Задача "${title}" создана!`);
+        const description = taskCard.querySelector("div[style*='white-space']")?.innerText || "";
+        const deadline_date = taskCard.querySelector("input[type='date']")?.value || new Date().toISOString().split("T")[0];
+        const executorSelect = taskCard.querySelector("select");
+        const executor_id = executorSelect?.value || 1;
+        const executor_name = executorSelect?.options[executorSelect.selectedIndex]?.textContent || "Не выбран";
+
+        const taskData = {
+            title: title || "Задача на создание",
+            description,
+            deadline_date,
+            executor_id,
+            tag: "string",
+            project_id: 1,
+            status: "Начал"
+        };
+
+        // --- Создаем задачу ---
+        const res = await fetch('https://ai-meneger-edward0076.amvera.io/tasks/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(taskData)
+        });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Ошибка сервера: ${errText}`);
+        }
+
+        const taskCreated = await res.json();
+        console.log("Задача создана:", taskCreated);
+
+        // --- файл  ---
+        const fileInput = taskCard.querySelector(".task_file");
+        let uploadedFileName = "";
+        if (fileInput && fileInput.files.length > 0) {
+            uploadedFileName = fileInput.files[0].name;
+        }
+
+        // --- Закрываем  ---
+        closeTasksModal();
+
+        // --- Сообщение в чат ---
+        chatRoll.innerHTML += `
+            <div class="gpt_message">
+                <div class="gpt_message__card" style="background:#e6ffe6; color:#333; padding:8px; margin-top:6px; border-radius:6px; font-size:14px;">
+                    ✅ Задача "${escapeHtml(title)}" создана
+                </div>
+            </div>`;
+
+        // --- Карточка задачи ---
+        chatRoll.innerHTML += `
+            <div class="gpt_message">
+                <div class="gpt_message__card" style="border:1px solid #ccc; padding:8px; margin-top:4px; border-radius:6px; font-size:14px;">
+                    <div><b>Наименование:</b> ${escapeHtml(title)}</div>
+                    <div><b>Описание:</b></div>
+                    <div style="white-space:pre-wrap; margin:4px 0;">${escapeHtml(description)}</div>
+                    <div><b>Сроки выполнения:</b> ${escapeHtml(deadline_date)}</div>
+                    <div><b>Исполнитель:</b> ${escapeHtml(executor_name)}</div>
+                    ${uploadedFileName ? `<div><b>Файл:</b> ${escapeHtml(uploadedFileName)}</div>` : ""}
+                </div>
+            </div>`;
+    } catch (err) {
+        console.error("Ошибка создания задачи:", err);
+        alert(`Ошибка создания задачи: ${err.message}`);
+    }
 }
+
 
 document.querySelector("#desktop_search_btn").onclick = () => {
     const messageText = document.querySelector("#desktop_search_input").value;
