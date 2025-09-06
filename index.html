@@ -42,25 +42,17 @@
                             </div>
 
                             <div class="select-dropdown">
+                                <div class="select-header">
+                                    <span class="selected-value">Выбрать</span>
+                                </div>
                                 <div class="search-container">
                                     <input type="text" placeholder="Поиск..." class="search-input">
                                 </div>
-
                                 <div class="options-list">
-                                    <div class="option-item selected">
-                                        Константин Константинопольский (ПТО)
-                                    </div>
-                                    <div class="option-item" data-id="1">
-                                        Иван Иванов (ОТК)
-                                    </div>
-                                    <div class="option-item" data-id="2">
-                                        Петр Петров (ПТО)
-                                    </div>
-                                    <div class="option-item" data-id="3">
-                                        Мария Сидорова (ОТК)
-                                    </div>
+                                    <!-- динамическое наполнение -->
                                 </div>
-                            </div>
+                                </div>
+
 
                         </div>
 
@@ -85,18 +77,7 @@
                                 </div>
 
                                 <div class="options-list">
-                                    <div class="option-item selected">
-                                        Константин Константинопольский (ПТО)
-                                    </div>
-                                    <div class="option-item">
-                                        Иван Иванов (ОТК)
-                                    </div>
-                                    <div class="option-item">
-                                        Петр Петров (ПТО)
-                                    </div>
-                                    <div class="option-item">
-                                        Мария Сидорова (ОТК)
-                                    </div>
+                                    <!-- динамически -->
                                 </div>
                             </div>
 
@@ -194,10 +175,14 @@
                             <div class="parameters__actions-button parameters__actions-accept_button">
                                 Применить
                             </div>
+                            <div class="parameters__actions-button parameters__actions-reset_button">
+                                Сбросить фильтры
+                            </div>
                             <div class="parameters__actions-button parameters__actions-cancel_button">
                                 Отмена
                             </div>
                         </div>
+
 
                     </div>
 
@@ -954,12 +939,12 @@
     </div>
 
     <div id="tasksModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="modal-close" onclick="closeTasksModal()">&times;</span>
-    <h2>Список задач</h2>
-    <div id="tasksContainer"></div>
-  </div>
-</div>
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeTasksModal()">&times;</span>
+            <h2>Список задач</h2>
+            <div id="tasksContainer"></div>
+        </div>
+    </div>
 
     <script src="assets/js/get_tg_id.js"></script>
     <script src="assets/js/app.js"></script>

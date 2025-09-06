@@ -11,6 +11,11 @@ window.onload = async () => {
 
     // });
 
+    while (!window.app_tg_id) {
+        console.log("Ожидание TG ID...");
+        await new Promise(r => setTimeout(r, 300));
+    }
+
     let allProjects = [];
 
     await fetch(`https://ai-meneger-edward0076.amvera.io/projects/by_tg/${app_tg_id}`)

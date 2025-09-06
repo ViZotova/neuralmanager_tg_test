@@ -6,7 +6,7 @@ async function sendMessage(messageText) {
     const fileInput = document.querySelector(".chat-search__input input[type='file']");
     const formData = new FormData();
 
-    formData.append('tg_id', app_tg_id);
+    formData.append('tg_id', window.app_tg_id);
     formData.append('prompt', messageText);
     if (currentChatId >= 0) formData.append('chat_id', currentChatId);
     if (fileInput.files[0]) formData.append('file', fileInput.files[0]);
