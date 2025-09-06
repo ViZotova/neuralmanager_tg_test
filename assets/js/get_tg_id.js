@@ -1,18 +1,4 @@
-// === Заглушка для теста ===
-// if (!window.Telegram) {
-//     window.Telegram = {
-//         WebApp: {
-//             ready: () => console.log("WebApp ready"),
-//             expand: () => console.log("WebApp expanded"),
-//             disableVerticalSwipes: () => console.log("Vertical swipes disabled"),
-//             initDataUnsafe: {
-//                 user: {
-//                     id: 5254325840
-//                 }
-//             }
-//         }
-//     };
-// }
+
 
 async function fetchUsers() {
     const url = `https://ai-meneger-edward0076.amvera.io/users/`;
@@ -33,25 +19,36 @@ function displayTgId(tgId) {
 
 async function initTgId() {
     try {
-        const tg = window.Telegram?.WebApp;
-        tg?.ready();
-        tg?.expand();
-        tg?.disableVerticalSwipes();
+        let telegramWebId;
 
-        const user = tg?.initDataUnsafe?.user;
-        if (!user) {
-            console.error("Нет данных о пользователе из Telegram WebApp");
-            return;
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+            tg.disableVerticalSwipes();
+
+            const user = tg.initDataUnsafe?.user;
+            if (!user) {
+                console.error("Нет данных о пользователе из Telegram WebApp");
+                return;
+            }
+
+            telegramWebId = user.id;
+        } else {
+            // Заглушка 
+            console.warn("Telegram WebApp недоступен, используем тестовый ID");
+            telegramWebId = 5254325840; 
         }
 
-        const telegramWebId = user.id;
-        console.log("Зашёл пользователь с WebApp ID:", telegramWebId);
+        console.log("Используемый Telegram ID:", telegramWebId);
 
+        // Сохраняем ID в localStorage и глобально
         localStorage.setItem("userId", telegramWebId);
         window.app_tg_id = telegramWebId;
 
+        // Загружаем пользователей из базы
         const users = await fetchUsers();
-        const currentUser = users.find(u => String(u.tg_id) === String(telegramWebId) || u.username === `@${user.username}`);
+        const currentUser = users.find(u => String(u.tg_id) === String(telegramWebId));
 
         if (currentUser) {
             window.app_tg_id = currentUser.tg_id;
@@ -67,5 +64,8 @@ async function initTgId() {
         console.error("Ошибка в initTgId:", err);
     }
 }
+
+initTgId();
+
 
 initTgId();
