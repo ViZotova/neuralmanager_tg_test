@@ -1,3 +1,20 @@
+// (только для локальной проверки)
+// if (!window.Telegram) {
+//     window.Telegram = {
+//         WebApp: {
+//             ready: () => console.log("WebApp ready"),
+//             expand: () => console.log("WebApp expand"),
+//             disableVerticalSwipes: () => console.log("WebApp disableVerticalSwipes"),
+//             initDataUnsafe: {
+//                 user: {
+//                     id: 5254325840,
+//                     username: "Edward0076"
+//                 }
+//             }
+//         }
+//     };
+// }
+
 async function fetchUsers() {
     const url = `https://ai-meneger-edward0076.amvera.io/users/`;
     try {
@@ -28,22 +45,20 @@ async function initTgId() {
             return;
         }
 
-        const telegramId = user.id || user?.tg_id; // берём ID пользователя из WebApp
-        console.log("Зашёл пользователь с TG ID:", telegramId);
-
-        // сохраняем в localStorage
-        if (telegramId) localStorage.setItem("userId", telegramId);
+        const telegramWebId = user.id;
+        console.log("Зашёл пользователь с WebApp ID:", telegramWebId);
 
         const users = await fetchUsers();
-        // ищем пользователя по tg_id
-        const currentUser = users.find(u => u.tg_id == telegramId);
+        // ищем пользователя по username или tg_id
+        const currentUser = users.find(u => u.tg_id == telegramWebId || u.username === `@${user.username}`);
 
         if (currentUser) {
             window.app_tg_id = currentUser.tg_id;
             displayTgId(window.app_tg_id);
+            localStorage.setItem("userId", window.app_tg_id);
             console.log("TG ID найден:", window.app_tg_id, "Пользователь:", currentUser.name);
         } else {
-            console.warn(`Пользователь с TG ID ${telegramId} не найден в базе`);
+            console.warn(`Пользователь с TG ID ${telegramWebId} не найден в базе`);
         }
     } catch (err) {
         console.error("Ошибка в initTgId:", err);
@@ -52,4 +67,4 @@ async function initTgId() {
 
 initTgId();
 
-
+window.app_tg_id = window.app_tg_id || localStorage.getItem("userId");
