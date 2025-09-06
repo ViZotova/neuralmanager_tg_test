@@ -1,14 +1,13 @@
-// (только для локальной проверки)
+// === Заглушка для теста ===
 // if (!window.Telegram) {
 //     window.Telegram = {
 //         WebApp: {
 //             ready: () => console.log("WebApp ready"),
-//             expand: () => console.log("WebApp expand"),
-//             disableVerticalSwipes: () => console.log("WebApp disableVerticalSwipes"),
+//             expand: () => console.log("WebApp expanded"),
+//             disableVerticalSwipes: () => console.log("Vertical swipes disabled"),
 //             initDataUnsafe: {
 //                 user: {
-//                     id: 5254325840,
-//                     username: "Edward0076"
+//                     id: 5254325840
 //                 }
 //             }
 //         }
@@ -48,23 +47,25 @@ async function initTgId() {
         const telegramWebId = user.id;
         console.log("Зашёл пользователь с WebApp ID:", telegramWebId);
 
+        localStorage.setItem("userId", telegramWebId);
+        window.app_tg_id = telegramWebId;
+
         const users = await fetchUsers();
-        // ищем пользователя по username или tg_id
-        const currentUser = users.find(u => u.tg_id == telegramWebId || u.username === `@${user.username}`);
+        const currentUser = users.find(u => String(u.tg_id) === String(telegramWebId) || u.username === `@${user.username}`);
 
         if (currentUser) {
             window.app_tg_id = currentUser.tg_id;
+            localStorage.setItem("userId", currentUser.tg_id);
             displayTgId(window.app_tg_id);
-            localStorage.setItem("userId", window.app_tg_id);
             console.log("TG ID найден:", window.app_tg_id, "Пользователь:", currentUser.name);
         } else {
             console.warn(`Пользователь с TG ID ${telegramWebId} не найден в базе`);
+            displayTgId(window.app_tg_id);
         }
+
     } catch (err) {
         console.error("Ошибка в initTgId:", err);
     }
 }
 
 initTgId();
-
-window.app_tg_id = window.app_tg_id || localStorage.getItem("userId");
